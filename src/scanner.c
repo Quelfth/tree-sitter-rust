@@ -8,7 +8,15 @@ enum TokenType {
     RAW_STRING_LITERAL_START,
     RAW_STRING_LITERAL_CONTENT,
     RAW_STRING_LITERAL_END,
-    FLOAT_LITERAL,
+    CHAR_PREFIX,
+    CHAR_QUOTE,
+    LIFETIME_QUOTE,
+    LITERAL_SUFFIX,
+    HEXADECIMAL_PREFIX,
+    BINARY_PREFIX,
+    OCTAL_PREFIX,
+    DECIMAL_POINT,
+    EXPONENT_E,
     BLOCK_OUTER_DOC_MARKER,
     BLOCK_INNER_DOC_MARKER,
     BLOCK_COMMENT_CONTENT,
@@ -40,10 +48,16 @@ void tree_sitter_rust_external_scanner_deserialize(void *payload, const char *bu
 }
 
 static inline bool is_num_char(int32_t c) { return c == '_' || iswdigit(c); }
+static inline bool is_hex_num_char(int32_t c) { return c == '_' || iswxdigit(c); }
+static inline bool is_bin_num_char(int32_t c) { return c == '_' || c == '0' || c == '1'; }
+static inline bool is_oct_num_char(int32_t c) { return c == '_' || c >= '0' && c - '0' < 8; }
 
 static inline void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 
 static inline void skip(TSLexer *lexer) { lexer->advance(lexer, true); }
+
+static inline bool is_suffix_start(int32_t c) { return c == '_' || iswalpha(c) || c > 127; }
+static inline bool is_suffix_continue(int32_t c) { return c == '_' || iswalpha(c) || iswdigit(c) || c > 127; }
 
 static inline bool process_string(TSLexer *lexer) {
     bool has_content = false;
@@ -119,68 +133,94 @@ static inline bool scan_raw_string_end(Scanner *scanner, TSLexer *lexer) {
     return true;
 }
 
-static inline bool process_float_literal(TSLexer *lexer) {
-    lexer->result_symbol = FLOAT_LITERAL;
-
+static inline bool process_char_prefix(TSLexer *lexer) {
+    if (lexer->lookahead != 'b') { return false; }
     advance(lexer);
-    while (is_num_char(lexer->lookahead)) {
+    if (lexer->lookahead != '\'') { return false; }
+    lexer->result_symbol = CHAR_PREFIX;
+    return true;
+}
+
+static inline bool process_char_or_lifetime(TSLexer *lexer) {
+    if (lexer->lookahead == '\'') {
         advance(lexer);
-    }
 
-    bool has_fraction = false, has_exponent = false;
-
-    if (lexer->lookahead == '.') {
-        has_fraction = true;
-        advance(lexer);
-        if (iswalpha(lexer->lookahead)) {
-            // The dot is followed by a letter: 1.max(2) => not a float but an integer
-            return false;
-        }
-
-        if (lexer->lookahead == '.') {
-            return false;
-        }
-        while (is_num_char(lexer->lookahead)) {
-            advance(lexer);
-        }
-    }
-
-    lexer->mark_end(lexer);
-
-    if (lexer->lookahead == 'e' || lexer->lookahead == 'E') {
-        has_exponent = true;
-        advance(lexer);
-        if (lexer->lookahead == '+' || lexer->lookahead == '-') {
-            advance(lexer);
-        }
-        if (!is_num_char(lexer->lookahead)) {
+        lexer->mark_end(lexer);
+        if (lexer->lookahead == '\\') {
+            lexer->result_symbol = CHAR_QUOTE;
             return true;
         }
         advance(lexer);
-        while (is_num_char(lexer->lookahead)) {
-            advance(lexer);
+        if (lexer->lookahead == '\'') {
+            lexer-> result_symbol = CHAR_QUOTE;
+            return true;
+        } else {
+            lexer->result_symbol = LIFETIME_QUOTE;
+            return true;
         }
-
-        lexer->mark_end(lexer);
     }
+    return false;
+}
 
-    if (!has_exponent && !has_fraction) {
-        return false;
-    }
-
-    if (lexer->lookahead != 'u' && lexer->lookahead != 'i' && lexer->lookahead != 'f') {
-        return true;
-    }
+static inline bool process_numeric_prefix(TSLexer *lexer) {
+    if (lexer->lookahead != '0') { return false; }
     advance(lexer);
-    if (!iswdigit(lexer->lookahead)) {
-        return true;
+    switch (lexer->lookahead) {
+        case 'x':
+            advance(lexer);
+            if (!is_hex_num_char(lexer->lookahead)) { return false; }
+            lexer->result_symbol = HEXADECIMAL_PREFIX;
+            return true;
+        case 'b':
+            advance(lexer);
+            if (!is_bin_num_char(lexer->lookahead)) { return false; }
+            lexer->result_symbol = BINARY_PREFIX;
+            return true;
+        case 'o':
+            advance(lexer);
+            if (!is_oct_num_char(lexer->lookahead)) { return false; }
+            lexer->result_symbol = OCTAL_PREFIX;
+            return true;
     }
+    return false;
+}
 
-    while (iswdigit(lexer->lookahead)) {
+static inline bool process_decimal_point(TSLexer *lexer) {
+    if (lexer->lookahead != '.') { return false; }
+    advance(lexer);
+
+    // This is a decimal point unless it is followed by a letter as in 3.max(4)
+    // or another '.' as in 4..5
+    // I'm not sure whether iswalpha handles all unicode identifier characters
+    // but this is how it was done in the previous float-parsing logic.
+    if (iswalpha(lexer->lookahead) || lexer->lookahead == '.') { return false; }
+
+    lexer->result_symbol = DECIMAL_POINT;
+    return true;
+}
+
+static inline bool process_exponent_e(TSLexer *lexer) {
+    if (lexer->lookahead != 'e' && lexer->lookahead != 'E') { return false; }
+    advance(lexer);
+    lexer->mark_end(lexer);
+
+    if (lexer->lookahead == '+' || lexer->lookahead == '-') {
         advance(lexer);
     }
 
-    lexer->mark_end(lexer);
+    if (!is_num_char(lexer->lookahead)) { return false; }
+
+    lexer->result_symbol = EXPONENT_E;
+    return true;
+}
+
+static inline bool process_literal_suffix(TSLexer *lexer) {
+    if (!is_suffix_start(lexer->lookahead)) { return false; }
+    advance(lexer);
+    while (is_suffix_continue(lexer->lookahead)) {
+        advance(lexer);
+    }
+    lexer->result_symbol = LITERAL_SUFFIX;
     return true;
 }
 
@@ -360,7 +400,7 @@ bool tree_sitter_rust_external_scanner_scan(void *payload, TSLexer *lexer, const
         return process_block_comment(lexer, valid_symbols);
     }
 
-    if (valid_symbols[STRING_CONTENT] && !valid_symbols[FLOAT_LITERAL]) {
+    if (valid_symbols[STRING_CONTENT]) {
         return process_string(lexer);
     }
 
@@ -368,8 +408,31 @@ bool tree_sitter_rust_external_scanner_scan(void *payload, TSLexer *lexer, const
         return process_line_doc_content(lexer);
     }
 
+    if (valid_symbols[DECIMAL_POINT] && lexer->lookahead == '.') {
+        return process_decimal_point(lexer);
+    }
+    if (valid_symbols[EXPONENT_E] && (lexer->lookahead == 'e' || lexer->lookahead == 'E')) {
+        return process_exponent_e(lexer);
+    }
+
+    if (valid_symbols[LITERAL_SUFFIX] && is_suffix_start(lexer->lookahead)) {
+        return process_literal_suffix(lexer);
+    }
+
     while (iswspace(lexer->lookahead)) {
         skip(lexer);
+    }
+
+    if ((valid_symbols[HEXADECIMAL_PREFIX] || valid_symbols[BINARY_PREFIX] || valid_symbols[OCTAL_PREFIX]) && lexer->lookahead == '0') {
+        return process_numeric_prefix(lexer);
+    }
+
+    if (valid_symbols[CHAR_PREFIX] && lexer->lookahead == 'b') {
+        if(process_char_prefix(lexer)) {
+            return true;
+        } else if (valid_symbols[RAW_STRING_LITERAL_START] && lexer->lookahead == 'r') {
+            return scan_raw_string_start(scanner, lexer);
+        }
     }
 
     if (valid_symbols[RAW_STRING_LITERAL_START] &&
@@ -385,8 +448,8 @@ bool tree_sitter_rust_external_scanner_scan(void *payload, TSLexer *lexer, const
         return scan_raw_string_end(scanner, lexer);
     }
 
-    if (valid_symbols[FLOAT_LITERAL] && iswdigit(lexer->lookahead)) {
-        return process_float_literal(lexer);
+    if ((valid_symbols[CHAR_QUOTE] || valid_symbols[LIFETIME_QUOTE]) && lexer->lookahead == '\'') {
+        return process_char_or_lifetime(lexer);
     }
 
     return false;

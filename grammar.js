@@ -30,23 +30,6 @@ const PREC = {
   closure: -1,
 };
 
-const numericTypes = [
-  'u8',
-  'i8',
-  'u16',
-  'i16',
-  'u32',
-  'i32',
-  'u64',
-  'i64',
-  'u128',
-  'i128',
-  'isize',
-  'usize',
-  'f32',
-  'f64',
-];
-
 // https://doc.rust-lang.org/reference/tokens.html#punctuation
 const TOKEN_TREE_NON_SPECIAL_PUNCTUATION = [
   '+', '-', '*', '/', '%', '^', '!', '&', '|', '&&', '||', '<<',
@@ -54,8 +37,6 @@ const TOKEN_TREE_NON_SPECIAL_PUNCTUATION = [
   '>>=', '=', '==', '!=', '>', '<', '>=', '<=', '@', '_', '.',
   '..', '...', '..=', ',', ';', ':', '::', '->', '=>', '#', '?',
 ];
-
-const primitiveTypes = numericTypes.concat(['bool', 'str', 'char']);
 
 module.exports = grammar({
   name: 'rust',
@@ -71,7 +52,15 @@ module.exports = grammar({
     $._raw_string_literal_start,
     $.raw_string_literal_content,
     $._raw_string_literal_end,
-    $.float_literal,
+    $.char_prefix,
+    $.char_quote,
+    $.lifetime_quote,
+    $.literal_suffix,
+    $.hexadecimal_prefix,
+    $.binary_prefix,
+    $.octal_prefix,
+    $.decimal_point,
+    $.exponent_e,
     $._outer_block_doc_comment_marker,
     $._inner_block_doc_comment_marker,
     $._block_comment_content,
@@ -113,7 +102,7 @@ module.exports = grammar({
     [$.visibility_modifier, $.scoped_identifier, $.scoped_type_identifier],
   ],
 
-  word: $ => $.identifier,
+  word: $ => $.identifier_word,
 
   rules: {
     source_file: $ => seq(
@@ -236,7 +225,6 @@ module.exports = grammar({
     // with $).
     _non_special_token: $ => choice(
       $._literal, $.identifier, $.mutable_specifier, $.self, $.super, $.crate,
-      alias(choice(...primitiveTypes), $.primitive_type),
       prec.right(repeat1(choice(...TOKEN_TREE_NON_SPECIAL_PUNCTUATION))),
       '\'',
       'as', 'async', 'await', 'break', 'const', 'continue', 'default', 'enum', 'fn', 'for', 'gen',
@@ -481,7 +469,6 @@ module.exports = grammar({
         $.tuple_type,
         $.array_type,
         $.higher_ranked_trait_bound,
-        alias(choice(...primitiveTypes), $.primitive_type),
       )),
       field('bounds', $.trait_bounds),
     ),
@@ -724,7 +711,6 @@ module.exports = grammar({
       $.dynamic_type,
       $.bounded_type,
       $.removed_trait_bound,
-      alias(choice(...primitiveTypes), $.primitive_type),
     ),
 
     bracketed_type: $ => seq(
@@ -742,7 +728,7 @@ module.exports = grammar({
       field('alias', $._type),
     ),
 
-    lifetime: $ => prec(1, seq('\'', $.identifier)),
+    lifetime: $ => prec(1, seq(alias($.lifetime_quote, "'"), $.identifier)),
 
     array_type: $ => seq(
       '[',
@@ -902,7 +888,6 @@ module.exports = grammar({
       $.yield_expression,
       $._literal,
       prec.left($.identifier),
-      alias(choice(...primitiveTypes), $.identifier),
       prec.left($._reserved_identifier),
       $.self,
       $.scoped_identifier,
@@ -963,7 +948,6 @@ module.exports = grammar({
       alias($.delim_token_tree, $.token_tree),
     ),
 
-    // Should match any token other than a delimiter.
     _non_delim_token: $ => choice(
       $._non_special_token,
       '$',
@@ -1281,7 +1265,7 @@ module.exports = grammar({
       '|',
     ),
 
-    label: $ => seq('\'', $.identifier),
+    label: $ => seq(alias($.lifetime_quote, "'"), $.identifier),
 
     break_expression: $ => prec.left(seq('break', optional($.label), optional($._expression))),
 
@@ -1338,7 +1322,6 @@ module.exports = grammar({
 
     _pattern: $ => choice(
       $._literal_pattern,
-      alias(choice(...primitiveTypes), $.identifier),
       $.identifier,
       $.scoped_identifier,
       $.tuple_pattern,
@@ -1415,20 +1398,29 @@ module.exports = grammar({
       $._pattern,
     )),
 
-    range_pattern: $ => seq(
-      choice(
-        $._literal_pattern,
-        $._path,
-      ),
-      choice(
-        seq(
-          choice('...', '..=', '..'),
-          choice(
-            $._literal_pattern,
-            $._path,
-          ),
+    range_pattern: $ => choice(
+      seq(
+        choice('...', '..=', '..'),
+        choice(
+          $._literal_pattern,
+          $._path,
         ),
-        '..',
+      ),
+      seq(
+        choice(
+          $._literal_pattern,
+          $._path,
+        ),
+        choice(
+          seq(
+            choice('...', '..=', '..'),
+            choice(
+              $._literal_pattern,
+              $._path,
+            ),
+          ),
+          '..',
+        ),
       ),
     ),
 
@@ -1477,15 +1469,40 @@ module.exports = grammar({
 
     negative_literal: $ => seq('-', choice($.integer_literal, $.float_literal)),
 
-    integer_literal: _ => token(seq(
+    digits: _ => /[0-9_]+/,
+
+    integer_literal: $ => seq(
       choice(
-        /[0-9][0-9_]*/,
-        /0x[0-9a-fA-F_]+/,
-        /0b[01_]+/,
-        /0o[0-7_]+/,
+        alias(/[0-9][0-9_]*/, $.digits),
+        seq(alias($.hexadecimal_prefix, "0x"), alias(/[0-9a-fA-F_]+/, $.digits)),
+        seq(alias($.binary_prefix, "0b"), alias(/[01_]+/, $.digits)),
+        seq(alias($.octal_prefix, "0o"), alias(/[0-7_]+/, $.digits)),
       ),
-      optional(choice(...numericTypes)),
-    )),
+      optional($.literal_suffix),
+    ),
+
+    float_literal: $ => seq(
+      alias(/[0-9][0-9_]*/, $.digits),
+      choice(
+        seq(
+          alias($.decimal_point, "."),
+          optional($.digits),
+        ),
+        seq(
+          alias($.exponent_e, "e"),
+          optional(choice("+", "-")),
+          $.digits,
+        ),
+        seq(
+          alias($.decimal_point, "."),
+          $.digits,
+          alias($.exponent_e, "e"),
+          optional(choice("+", "-")),
+          $.digits,
+        ),
+      ),
+      optional($.literal_suffix),
+    ),
 
     string_literal: $ => seq(
       alias(/[bc]?"/, '"'),
@@ -1494,28 +1511,28 @@ module.exports = grammar({
         $.string_content,
       )),
       token.immediate('"'),
+      optional($.literal_suffix),
     ),
 
     raw_string_literal: $ => seq(
-      $._raw_string_literal_start,
+      alias($._raw_string_literal_start, '"'),
       alias($.raw_string_literal_content, $.string_content),
-      $._raw_string_literal_end,
+      alias($._raw_string_literal_end, '"'),
+      optional($.literal_suffix),
     ),
 
-    char_literal: _ => token(seq(
-      optional('b'),
-      '\'',
+    char_literal: $ => seq(
+      optional($.char_prefix),
+      alias($.char_quote, "'"),
       optional(choice(
-        seq('\\', choice(
-          /[^xu]/,
-          /u[0-9a-fA-F]{4}/,
-          /u\{[0-9a-fA-F]+\}/,
-          /x[0-9a-fA-F]{2}/,
-        )),
-        /[^\\']/,
+        $.escape_sequence,
+        $.literal_char,
       )),
       '\'',
-    )),
+      optional($.literal_suffix),
+    ),
+
+    literal_char: _ => /[^\\']/,
 
     escape_sequence: _ => token.immediate(
       seq('\\',
@@ -1583,7 +1600,6 @@ module.exports = grammar({
 
     _path: $ => choice(
       $.self,
-      alias(choice(...primitiveTypes), $.identifier),
       $.metavariable,
       $.super,
       $.crate,
@@ -1592,7 +1608,10 @@ module.exports = grammar({
       $._reserved_identifier,
     ),
 
-    identifier: _ => /(r#)?[_\p{XID_Start}][_\p{XID_Continue}]*/,
+    identifier: $ => seq(optional("r#"), $.identifier_word),
+
+    identifier_word: _ =>  /[_\p{XID_Start}][_\p{XID_Continue}]*/,
+
 
     shebang: _ => /#![\s]*[^\[].+/,
 

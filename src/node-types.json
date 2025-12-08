@@ -438,10 +438,6 @@
         "named": true
       },
       {
-        "type": "primitive_type",
-        "named": true
-      },
-      {
         "type": "reference_type",
         "named": true
       },
@@ -910,6 +906,7 @@
   {
     "type": "block_comment",
     "named": true,
+    "extra": true,
     "fields": {
       "doc": {
         "multiple": false,
@@ -1193,6 +1190,33 @@
       "types": [
         {
           "type": "_pattern",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "char_literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "char_prefix",
+          "named": true
+        },
+        {
+          "type": "escape_sequence",
+          "named": true
+        },
+        {
+          "type": "literal_char",
+          "named": true
+        },
+        {
+          "type": "literal_suffix",
           "named": true
         }
       ]
@@ -1808,6 +1832,21 @@
     }
   },
   {
+    "type": "field_identifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier_word",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "field_initializer",
     "named": true,
     "fields": {
@@ -1905,6 +1944,25 @@
       "types": [
         {
           "type": "mutable_specifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "float_literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "digits",
+          "named": true
+        },
+        {
+          "type": "literal_suffix",
           "named": true
         }
       ]
@@ -2365,6 +2423,21 @@
     }
   },
   {
+    "type": "identifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "identifier_word",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "if_expression",
     "named": true,
     "fields": {
@@ -2508,6 +2581,25 @@
     "fields": {}
   },
   {
+    "type": "integer_literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "digits",
+          "named": true
+        },
+        {
+          "type": "literal_suffix",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "label",
     "named": true,
     "fields": {},
@@ -2641,6 +2733,7 @@
   {
     "type": "line_comment",
     "named": true,
+    "extra": true,
     "fields": {
       "doc": {
         "multiple": false,
@@ -3253,9 +3346,13 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "literal_suffix",
+          "named": true
+        },
         {
           "type": "string_content",
           "named": true
@@ -3570,6 +3667,21 @@
     }
   },
   {
+    "type": "shorthand_field_identifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier_word",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "shorthand_field_initializer",
     "named": true,
     "fields": {},
@@ -3687,6 +3799,10 @@
       "types": [
         {
           "type": "escape_sequence",
+          "named": true
+        },
+        {
+          "type": "literal_suffix",
           "named": true
         },
         {
@@ -3873,10 +3989,6 @@
           "named": true
         },
         {
-          "type": "primitive_type",
-          "named": true
-        },
-        {
           "type": "self",
           "named": true
         },
@@ -3921,10 +4033,6 @@
         },
         {
           "type": "mutable_specifier",
-          "named": true
-        },
-        {
-          "type": "primitive_type",
           "named": true
         },
         {
@@ -3979,10 +4087,6 @@
           "named": true
         },
         {
-          "type": "primitive_type",
-          "named": true
-        },
-        {
           "type": "self",
           "named": true
         },
@@ -4027,10 +4131,6 @@
         },
         {
           "type": "mutable_specifier",
-          "named": true
-        },
-        {
-          "type": "primitive_type",
           "named": true
         },
         {
@@ -4351,6 +4451,21 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "type_identifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier_word",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -4841,10 +4956,6 @@
             "named": true
           },
           {
-            "type": "primitive_type",
-            "named": true
-          },
-          {
             "type": "reference_type",
             "named": true
           },
@@ -5044,6 +5155,18 @@
     "named": false
   },
   {
+    "type": "0b",
+    "named": false
+  },
+  {
+    "type": "0o",
+    "named": false
+  },
+  {
+    "type": "0x",
+    "named": false
+  },
+  {
     "type": ":",
     "named": false
   },
@@ -5148,7 +5271,7 @@
     "named": false
   },
   {
-    "type": "char_literal",
+    "type": "char_prefix",
     "named": true
   },
   {
@@ -5168,11 +5291,19 @@
     "named": false
   },
   {
+    "type": "digits",
+    "named": true
+  },
+  {
     "type": "doc_comment",
     "named": true
   },
   {
     "type": "dyn",
+    "named": false
+  },
+  {
+    "type": "e",
     "named": false
   },
   {
@@ -5200,14 +5331,6 @@
     "named": false
   },
   {
-    "type": "field_identifier",
-    "named": true
-  },
-  {
-    "type": "float_literal",
-    "named": true
-  },
-  {
     "type": "fn",
     "named": false
   },
@@ -5224,7 +5347,7 @@
     "named": false
   },
   {
-    "type": "identifier",
+    "type": "identifier_word",
     "named": true
   },
   {
@@ -5238,10 +5361,6 @@
   {
     "type": "in",
     "named": false
-  },
-  {
-    "type": "integer_literal",
-    "named": true
   },
   {
     "type": "item",
@@ -5258,6 +5377,14 @@
   {
     "type": "literal",
     "named": false
+  },
+  {
+    "type": "literal_char",
+    "named": true
+  },
+  {
+    "type": "literal_suffix",
+    "named": true
   },
   {
     "type": "loop",
@@ -5300,11 +5427,11 @@
     "named": false
   },
   {
-    "type": "primitive_type",
-    "named": true
+    "type": "pub",
+    "named": false
   },
   {
-    "type": "pub",
+    "type": "r#",
     "named": false
   },
   {
@@ -5325,10 +5452,6 @@
   },
   {
     "type": "shebang",
-    "named": true
-  },
-  {
-    "type": "shorthand_field_identifier",
     "named": true
   },
   {
@@ -5374,10 +5497,6 @@
   {
     "type": "type",
     "named": false
-  },
-  {
-    "type": "type_identifier",
-    "named": true
   },
   {
     "type": "union",
