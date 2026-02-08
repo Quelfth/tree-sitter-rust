@@ -236,7 +236,7 @@ module.exports = grammar({
     attribute_item: $ => seq(
       '#',
       '[',
-      $.attribute,
+      $._attribute,
       ']',
     ),
 
@@ -244,11 +244,135 @@ module.exports = grammar({
       '#',
       '!',
       '[',
-      $.attribute,
+      $._attribute,
       ']',
     ),
 
-    attribute: $ => seq(
+    _attribute: $ => choice(
+      $.unsafe_attribute,
+      $.builtin_attribute,
+      $.attribute_macro,
+    ),
+
+    unsafe_attribute: $ => seq('unsafe', '(', choice($.builtin_attribute, $.attribute_macro), ')'),
+
+    builtin_attribute: $ => choice(
+      seq('cfg', '(', $._cfg_predicate, ')'),
+      seq('cfg_attr', '(', $._cfg_predicate, ',', sepBy1(',', $._attribute), optional(','), ')'),
+      seq('ignore', optional(seq('=', $._any_string_literal))),
+      seq('should_panic', optional(choice(
+        seq('(', $.meta_name_value, ')'),
+        seq('=', $._any_string_literal),
+      ))),
+      'automatically_derived',
+      seq('macro_use', optional(seq('(', sepBy(',', $.name), optional(','), ')'))),
+      seq('macro_export', optional(seq('(', 'local_inner_macros', ')'))),
+      'proc_macro',
+      seq('proc_macro_derive', '(', field('trait', $.name), optional(seq(',', $.proc_macro_derive_helper_attributes)), ')'),
+      'proc_macro_attribute',
+      $.lint_level_attribute,
+      seq('must_use', optional(seq('=', $._any_string_literal))),
+      seq('deprecated', optional(choice(
+        seq('(', sepBy(',', $.meta_name_value), optional(','), ')'),
+        seq('=', $._any_string_literal),
+      ))),
+      seq('crate_name', '=', $._any_string_literal),
+      seq('crate_type', '=', $._any_string_literal),
+      seq('link', '(', sepBy(',', $.meta_name_value), optional(','), ')'),
+      seq('link_name', '=', $._any_string_literal),
+      'no_link',
+      'repr',
+      seq('export_name', '=', $._any_string_literal),
+      seq('link_section', '=', $._any_string_literal),
+      'no_mangle',
+      seq('used', optional(seq('(', choice('compiler', 'linker'), ')'))),
+      seq('link_ordinal', '(', $.integer_literal, ')'),
+      'naked',
+      seq('recursion_limit', '=', $._any_string_literal),
+      seq('type_length_limit', '=', $._any_string_literal),
+      'no_main',
+      seq('path', '=', $._any_string_literal),
+      'no_std',
+      'no_implicit_prelude',
+      'non_exhaustive',
+      seq('windows_subsystem', '=', $._any_string_literal),
+      'panic_handler',
+      seq('inline', optional(seq('(', choice('always', 'never'), ')'))),
+      'cold',
+      'no_builtins',
+      seq('target_feature', '(', sepBy(',', $.meta_name_value), optional(','), ')'),
+      'track_caller',
+      seq('instruction_set', '(', sepBy(',', $.simple_path), optional(','), ')'),
+      seq('doc', choice(
+        seq('(', choice('hidden', 'inline'), ')'),
+        seq('=', $._any_string_literal),
+      )),
+      seq('debugger_visualizer', '(', sepBy(',', $.meta_name_value), optional(','), ')'),
+      seq('collapse_debuginfo', '(', choice('no', 'external', 'yes'), ')'),
+      seq('feature', '(', sepBy(',', $.name), optional(','), ')'),
+      seq('stable', '(', sepBy(',', $.meta_name_value), optional(','), ')'),
+      seq('unstable', '(', sepBy(',', $.meta_name_value), optional(','), ')'),
+      'unstable_feature_bound',
+      seq('rustc_const_unstable', '(', sepBy(',', $.meta_name_value), optional(','), ')'),
+      seq('rustc_const_stable', '(', sepBy(',', $.meta_name_value), optional(','), ')'),
+      seq('rustc_default_body_unstable', '(', sepBy(',', $.meta_name_value), optional(','), ')'),
+      seq('allow_internal_unstable', optional(seq('(', sepBy(',', $.name), optional(','), ')'))),
+      'allow_interal_unsafe',
+      'rustc_eii_foreign_item',
+    ),
+
+    lint_level_attribute: $ => seq(
+      choice(
+        'warn',
+        'allow',
+        'expect',
+        'forbid',
+        'deny',
+      ),
+      '(', 
+      sepBy(',', $.simple_path),
+      optional(seq(',', 'reason', '=', $._any_string_literal)),
+      optional(','),
+      ')',
+    ),
+
+    repr_modifier: $ => choice(
+      'C',
+      'Rust',
+      'transparent',
+      seq('align', '(', $.integer_literal, ')'),
+      seq('packed', optional(seq('(', $.integer_literal, ')'))),
+      $.primitive_repr,
+    ),
+
+    primitive_repr: $ => /[ui](8|16|32|64|128|size)/,
+
+    meta_name_value: $ => seq($.name, '=', $._any_string_literal),
+
+    _any_string_literal: $ => choice($.string_literal, $.raw_string_literal),
+
+    _cfg_predicate: $ => choice(
+      $.cfg_option,
+      $.cfg_all,
+      $.cfg_any,
+      $.cfg_not,
+      $.cfg_boolean,
+    ),
+
+    cfg_option: $ => seq(
+      $.name,
+      optional(seq('=', choice($.string_literal, $.raw_string_literal)))
+    ),
+
+    cfg_all: $ => seq('all', '(', sepBy(',', $._cfg_predicate), optional(','), ')'),
+    cfg_any: $ => seq('any', '(', sepBy(',', $._cfg_predicate), optional(','), ')'),
+    cfg_not: $ => seq('not', '(', $._cfg_predicate, ')'),
+
+    cfg_boolean: $ => choice('true', 'false'),
+
+    proc_macro_derive_helper_attributes: $ => seq('attributes', '(', sepBy(',', $.name), optional(','), ')'),
+
+    attribute_macro: $ => seq(
       $._path,
       optional(choice(
         seq('=', field('value', $._expression)),
@@ -1604,6 +1728,9 @@ module.exports = grammar({
       $.scoped_name,
       $._reserved_keyword,
     ),
+
+    simple_path: $ => seq(optional('::'), $._simple_path_segment, repeat(seq('::', $._simple_path_segment))),
+    _simple_path_segment: $ => choice($.name, $.keyword_scope),
 
     keyword_scope: $ => choice(
       'self',
