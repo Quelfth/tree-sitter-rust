@@ -79,12 +79,12 @@ module.exports = grammar({
 
   inline: $ => [
     $._path,
-    $._type_identifier,
+    $._type_name,
     $._tokens,
-    $._field_identifier,
+    $._field_name,
     $._non_special_token,
     $._declaration_statement,
-    $._reserved_identifier,
+    $._reserved_keyword,
     $._expression_ending_with_block,
   ],
 
@@ -93,16 +93,15 @@ module.exports = grammar({
     // See https://internals.rust-lang.org/t/pre-rfc-deprecating-anonymous-parameters/3710
     [$._type, $._pattern],
     [$.unit_type, $.tuple_pattern],
-    [$.scoped_identifier, $.scoped_type_identifier],
+    [$.scoped_name, $.scoped_type_name],
     [$.parameters, $._pattern],
     [$.parameters, $.tuple_struct_pattern],
     [$.type_parameters, $.for_lifetimes],
     [$.array_expression],
     [$.visibility_modifier],
-    [$.visibility_modifier, $.scoped_identifier, $.scoped_type_identifier],
   ],
 
-  word: $ => $.identifier_word,
+  word: $ => $.identifier,
 
   rules: {
     source_file: $ => seq(
@@ -157,8 +156,8 @@ module.exports = grammar({
       return seq(
         'macro_rules!',
         field('name', choice(
-          $.identifier,
-          $._reserved_identifier,
+          $.name,
+          $._reserved_keyword,
         )),
         choice(
           seq('(', rules, ')', ';'),
@@ -224,7 +223,7 @@ module.exports = grammar({
     // definitions. This is everything except $ and metavariables (which begin
     // with $).
     _non_special_token: $ => choice(
-      $._literal, $.identifier, $.mutable_specifier, $.self, $.super, $.crate,
+      $._literal, $.name, 'mut', 'self', 'super', 'crate',
       prec.right(repeat1(choice(...TOKEN_TREE_NON_SPECIAL_PUNCTUATION))),
       '\'',
       'as', 'async', 'await', 'break', 'const', 'continue', 'default', 'enum', 'fn', 'for', 'gen',
@@ -260,7 +259,7 @@ module.exports = grammar({
     mod_item: $ => seq(
       optional($.visibility_modifier),
       'mod',
-      field('name', $.identifier),
+      field('name', $.name),
       choice(
         ';',
         field('body', $.declaration_list),
@@ -285,7 +284,7 @@ module.exports = grammar({
     struct_item: $ => seq(
       optional($.visibility_modifier),
       'struct',
-      field('name', $._type_identifier),
+      field('name', $._type_name),
       field('type_parameters', optional($.type_parameters)),
       choice(
         seq(
@@ -304,7 +303,7 @@ module.exports = grammar({
     union_item: $ => seq(
       optional($.visibility_modifier),
       'union',
-      field('name', $._type_identifier),
+      field('name', $._type_name),
       field('type_parameters', optional($.type_parameters)),
       optional($.where_clause),
       field('body', $.field_declaration_list),
@@ -313,7 +312,7 @@ module.exports = grammar({
     enum_item: $ => seq(
       optional($.visibility_modifier),
       'enum',
-      field('name', $._type_identifier),
+      field('name', $._type_name),
       field('type_parameters', optional($.type_parameters)),
       optional($.where_clause),
       field('body', $.enum_variant_list),
@@ -328,7 +327,7 @@ module.exports = grammar({
 
     enum_variant: $ => seq(
       optional($.visibility_modifier),
-      field('name', $.identifier),
+      field('name', $.name),
       field('body', optional(choice(
         $.field_declaration_list,
         $.ordered_field_declaration_list,
@@ -348,7 +347,7 @@ module.exports = grammar({
 
     field_declaration: $ => seq(
       optional($.visibility_modifier),
-      field('name', $._field_identifier),
+      field('name', $._field_name),
       ':',
       field('type', $._type),
     ),
@@ -367,11 +366,11 @@ module.exports = grammar({
     extern_crate_declaration: $ => seq(
       optional($.visibility_modifier),
       'extern',
-      $.crate,
-      field('name', $.identifier),
+      'crate',
+      field('name', $.name),
       optional(seq(
         'as',
-        field('alias', $.identifier),
+        field('alias', $.name),
       )),
       ';',
     ),
@@ -379,7 +378,7 @@ module.exports = grammar({
     const_item: $ => seq(
       optional($.visibility_modifier),
       'const',
-      field('name', $.identifier),
+      field('name', $.name),
       ':',
       field('type', $._type),
       optional(
@@ -398,8 +397,8 @@ module.exports = grammar({
       // Not actual rust syntax, but made popular by the lazy_static crate.
       optional('ref'),
 
-      optional($.mutable_specifier),
-      field('name', $.identifier),
+      optional('mut'),
+      field('name', $.name),
       ':',
       field('type', $._type),
       optional(seq(
@@ -412,7 +411,7 @@ module.exports = grammar({
     type_item: $ => seq(
       optional($.visibility_modifier),
       'type',
-      field('name', $._type_identifier),
+      field('name', $._type_name),
       field('type_parameters', optional($.type_parameters)),
       '=',
       field('type', $._type),
@@ -424,7 +423,7 @@ module.exports = grammar({
       optional($.visibility_modifier),
       optional($.function_modifiers),
       'fn',
-      field('name', choice($.identifier, $.metavariable)),
+      field('name', choice($.name, $.metavariable)),
       field('type_parameters', optional($.type_parameters)),
       field('parameters', $.parameters),
       optional(seq('->', field('return_type', $._type))),
@@ -436,7 +435,7 @@ module.exports = grammar({
       optional($.visibility_modifier),
       optional($.function_modifiers),
       'fn',
-      field('name', choice($.identifier, $.metavariable)),
+      field('name', choice($.name, $.metavariable)),
       field('type_parameters', optional($.type_parameters)),
       field('parameters', $.parameters),
       optional(seq('->', field('return_type', $._type))),
@@ -461,8 +460,8 @@ module.exports = grammar({
     where_predicate: $ => seq(
       field('left', choice(
         $.lifetime,
-        $._type_identifier,
-        $.scoped_type_identifier,
+        $._type_name,
+        $.scoped_type_name,
         $.generic_type,
         $.reference_type,
         $.pointer_type,
@@ -480,8 +479,8 @@ module.exports = grammar({
       optional(seq(
         optional('!'),
         field('trait', choice(
-          $._type_identifier,
-          $.scoped_type_identifier,
+          $._type_name,
+          $.scoped_type_name,
           $.generic_type,
         )),
         'for',
@@ -495,7 +494,7 @@ module.exports = grammar({
       optional($.visibility_modifier),
       optional('unsafe'),
       'trait',
-      field('name', $._type_identifier),
+      field('name', $._type_name),
       field('type_parameters', optional($.type_parameters)),
       field('bounds', optional($.trait_bounds)),
       optional($.where_clause),
@@ -504,7 +503,7 @@ module.exports = grammar({
 
     associated_type: $ => seq(
       'type',
-      field('name', $._type_identifier),
+      field('name', $._type_name),
       field('type_parameters', optional($.type_parameters)),
       field('bounds', optional($.trait_bounds)),
       optional($.where_clause),
@@ -538,7 +537,7 @@ module.exports = grammar({
         choice(
           $.lifetime,
           $.metavariable,
-          $._type_identifier,
+          $._type_name,
           $.constrained_type_parameter,
           $.optional_type_parameter,
           $.const_parameter,
@@ -550,19 +549,19 @@ module.exports = grammar({
 
     const_parameter: $ => seq(
       'const',
-      field('name', $.identifier),
+      field('name', $.name),
       ':',
       field('type', $._type),
     ),
 
     constrained_type_parameter: $ => seq(
-      field('left', choice($.lifetime, $._type_identifier)),
+      field('left', choice($.lifetime, $._type_name)),
       field('bounds', $.trait_bounds),
     ),
 
     optional_type_parameter: $ => seq(
       field('name', choice(
-        $._type_identifier,
+        $._type_name,
         $.constrained_type_parameter,
       )),
       '=',
@@ -571,7 +570,7 @@ module.exports = grammar({
 
     let_declaration: $ => seq(
       'let',
-      optional($.mutable_specifier),
+      optional('mut'),
       field('pattern', $._pattern),
       optional(seq(
         ':',
@@ -621,7 +620,7 @@ module.exports = grammar({
     use_as_clause: $ => seq(
       field('path', $._path),
       'as',
-      field('alias', $.identifier),
+      field('alias', $.name),
     ),
 
     use_wildcard: $ => seq(
@@ -647,12 +646,12 @@ module.exports = grammar({
     self_parameter: $ => seq(
       optional('&'),
       optional($.lifetime),
-      optional($.mutable_specifier),
-      $.self,
+      optional('mut'),
+      'self',
     ),
 
     variadic_parameter: $ => seq(
-      optional($.mutable_specifier),
+      optional('mut'),
       optional(seq(
         field('pattern', $._pattern),
         ':',
@@ -661,7 +660,7 @@ module.exports = grammar({
     ),
 
     parameter: $ => seq(
-      optional($.mutable_specifier),
+      optional('mut'),
       field('pattern', choice(
         $._pattern,
         $.self,
@@ -676,15 +675,12 @@ module.exports = grammar({
     ),
 
     visibility_modifier: $ => choice(
-      $.crate,
       seq(
         'pub',
         optional(seq(
           '(',
           choice(
-            $.self,
-            $.super,
-            $.crate,
+            $.keyword_scope,
             seq('in', $._path),
           ),
           ')',
@@ -700,12 +696,13 @@ module.exports = grammar({
       $.metavariable,
       $.pointer_type,
       $.generic_type,
-      $.scoped_type_identifier,
+      $.scoped_type_name,
       $.tuple_type,
       $.unit_type,
       $.array_type,
       $.function_type,
-      $._type_identifier,
+      $.self_type,
+      $._type_name,
       $.macro_invocation,
       $.never_type,
       $.dynamic_type,
@@ -728,7 +725,7 @@ module.exports = grammar({
       field('alias', $._type),
     ),
 
-    lifetime: $ => prec(1, seq(alias($.lifetime_quote, "'"), $.identifier)),
+    lifetime: $ => prec(1, seq(alias($.lifetime_quote, "'"), $.name)),
 
     array_type: $ => seq(
       '[',
@@ -753,8 +750,8 @@ module.exports = grammar({
       prec(PREC.call, seq(
         choice(
           field('trait', choice(
-            $._type_identifier,
-            $.scoped_type_identifier,
+            $._type_name,
+            $.scoped_type_name,
           )),
           seq(
             optional($.function_modifiers),
@@ -777,8 +774,8 @@ module.exports = grammar({
 
     generic_function: $ => prec(1, seq(
       field('function', choice(
-        $.identifier,
-        $.scoped_identifier,
+        $.name,
+        $.scoped_name,
         $.field_expression,
       )),
       '::',
@@ -787,17 +784,17 @@ module.exports = grammar({
 
     generic_type: $ => prec(1, seq(
       field('type', choice(
-        $._type_identifier,
-        $._reserved_identifier,
-        $.scoped_type_identifier,
+        $._type_name,
+        $._reserved_keyword,
+        $.scoped_type_name,
       )),
       field('type_arguments', $.type_arguments),
     )),
 
     generic_type_with_turbofish: $ => seq(
       field('type', choice(
-        $._type_identifier,
-        $.scoped_identifier,
+        $._type_name,
+        $.scoped_name,
       )),
       '::',
       field('type_arguments', $.type_arguments),
@@ -826,7 +823,7 @@ module.exports = grammar({
     ),
 
     type_binding: $ => seq(
-      field('name', $._type_identifier),
+      field('name', $._type_name),
       field('type_arguments', optional($.type_arguments)),
       '=',
       field('type', $._type),
@@ -835,15 +832,17 @@ module.exports = grammar({
     reference_type: $ => seq(
       '&',
       optional($.lifetime),
-      optional($.mutable_specifier),
+      optional('mut'),
       field('type', $._type),
     ),
 
     pointer_type: $ => seq(
       '*',
-      choice('const', $.mutable_specifier),
+      choice('const', 'mut'),
       field('type', $._type),
     ),
+
+    self_type: _ => 'Self',
 
     never_type: _ => '!',
 
@@ -851,8 +850,8 @@ module.exports = grammar({
       'impl',
       optional(seq('for', $.type_parameters)),
       field('trait', choice(
-        $._type_identifier,
-        $.scoped_type_identifier,
+        $._type_name,
+        $.scoped_type_name,
         $.removed_trait_bound,
         $.generic_type,
         $.function_type,
@@ -864,14 +863,12 @@ module.exports = grammar({
       'dyn',
       field('trait', choice(
         $.higher_ranked_trait_bound,
-        $._type_identifier,
-        $.scoped_type_identifier,
+        $._type_name,
+        $.scoped_type_name,
         $.generic_type,
         $.function_type,
       )),
     ),
-
-    mutable_specifier: _ => 'mut',
 
     // Section - Expressions
 
@@ -887,10 +884,10 @@ module.exports = grammar({
       $.return_expression,
       $.yield_expression,
       $._literal,
-      prec.left($.identifier),
-      prec.left($._reserved_identifier),
+      prec.left($.name),
+      prec.left($._reserved_keyword),
       $.self,
-      $.scoped_identifier,
+      $.scoped_name,
       $.generic_function,
       $.await_expression,
       $.field_expression,
@@ -929,9 +926,9 @@ module.exports = grammar({
 
     macro_invocation: $ => seq(
       field('macro', choice(
-        $.scoped_identifier,
-        $.identifier,
-        $._reserved_identifier,
+        $.scoped_name,
+        $.name,
+        $._reserved_keyword,
       )),
       '!',
       alias($.delim_token_tree, $.token_tree),
@@ -953,26 +950,28 @@ module.exports = grammar({
       '$',
     ),
 
-    scoped_identifier: $ => seq(
+    self: $ => 'self',
+
+    scoped_name: $ => seq(
       field('path', optional(choice(
         $._path,
         $.bracketed_type,
         alias($.generic_type_with_turbofish, $.generic_type),
       ))),
       '::',
-      field('name', choice($.identifier, $.super)),
+      field('name', choice($.name, 'super')),
     ),
 
-    scoped_type_identifier_in_expression_position: $ => prec(-2, seq(
+    scoped_type_name_in_expression_position: $ => prec(-2, seq(
       field('path', optional(choice(
         $._path,
         alias($.generic_type_with_turbofish, $.generic_type),
       ))),
       '::',
-      field('name', $._type_identifier),
+      field('name', $._type_name),
     )),
 
-    scoped_type_identifier: $ => seq(
+    scoped_type_name: $ => seq(
       field('path', optional(choice(
         $._path,
         alias($.generic_type_with_turbofish, $.generic_type),
@@ -980,7 +979,7 @@ module.exports = grammar({
         $.generic_type,
       ))),
       '::',
-      field('name', $._type_identifier),
+      field('name', $._type_name),
     ),
 
     range_expression: $ => prec.left(PREC.range, choice(
@@ -1003,8 +1002,8 @@ module.exports = grammar({
     reference_expression: $ => prec(PREC.unary, seq(
       '&',
       choice(
-        seq('raw', choice('const', $.mutable_specifier)),
-        optional($.mutable_specifier),
+        seq('raw', choice('const', 'mut')),
+        optional('mut'),
       ),
       field('value', $._expression),
     )),
@@ -1107,8 +1106,8 @@ module.exports = grammar({
 
     struct_expression: $ => seq(
       field('name', choice(
-        $._type_identifier,
-        alias($.scoped_type_identifier_in_expression_position, $.scoped_type_identifier),
+        $._type_name,
+        alias($.scoped_type_name_in_expression_position, $.scoped_type_name),
         $.generic_type_with_turbofish,
       )),
       field('body', $.field_initializer_list),
@@ -1127,12 +1126,12 @@ module.exports = grammar({
 
     shorthand_field_initializer: $ => seq(
       repeat($.attribute_item),
-      $.identifier,
+      $.name,
     ),
 
     field_initializer: $ => seq(
       repeat($.attribute_item),
-      field('field', choice($._field_identifier, $.integer_literal)),
+      field('field', choice($._field_name, $.integer_literal)),
       ':',
       field('value', $._expression),
     ),
@@ -1265,7 +1264,7 @@ module.exports = grammar({
       '|',
     ),
 
-    label: $ => seq(alias($.lifetime_quote, "'"), $.identifier),
+    label: $ => seq(alias($.lifetime_quote, "'"), $.name),
 
     break_expression: $ => prec.left(seq('break', optional($.label), optional($._expression))),
 
@@ -1283,7 +1282,7 @@ module.exports = grammar({
       field('value', $._expression),
       '.',
       field('field', choice(
-        $._field_identifier,
+        $._field_name,
         $.integer_literal,
       )),
     )),
@@ -1322,12 +1321,12 @@ module.exports = grammar({
 
     _pattern: $ => choice(
       $._literal_pattern,
-      $.identifier,
-      $.scoped_identifier,
+      $.name,
+      $.scoped_name,
       $.tuple_pattern,
       $.tuple_struct_pattern,
       $.struct_pattern,
-      $._reserved_identifier,
+      $._reserved_keyword,
       $.ref_pattern,
       $.slice_pattern,
       $.captured_pattern,
@@ -1357,8 +1356,8 @@ module.exports = grammar({
 
     tuple_struct_pattern: $ => seq(
       field('type', choice(
-        $.identifier,
-        $.scoped_identifier,
+        $.name,
+        $.scoped_name,
         alias($.generic_type_with_turbofish, $.generic_type),
       )),
       '(',
@@ -1369,8 +1368,8 @@ module.exports = grammar({
 
     struct_pattern: $ => seq(
       field('type', choice(
-        $._type_identifier,
-        $.scoped_type_identifier,
+        $._type_name,
+        $.scoped_type_name,
       )),
       '{',
       sepBy(',', choice($.field_pattern, $.remaining_field_pattern)),
@@ -1380,11 +1379,11 @@ module.exports = grammar({
 
     field_pattern: $ => seq(
       optional('ref'),
-      optional($.mutable_specifier),
+      optional('mut'),
       choice(
-        field('name', alias($.identifier, $.shorthand_field_identifier)),
+        field('name', alias($.name, $.shorthand_field_name)),
         seq(
-          field('name', $._field_identifier),
+          field('name', $._field_name),
           ':',
           field('pattern', $._pattern),
         ),
@@ -1394,7 +1393,7 @@ module.exports = grammar({
     remaining_field_pattern: _ => '..',
 
     mut_pattern: $ => prec(-1, seq(
-      $.mutable_specifier,
+      'mut',
       $._pattern,
     )),
 
@@ -1430,14 +1429,14 @@ module.exports = grammar({
     ),
 
     captured_pattern: $ => seq(
-      $.identifier,
+      $.name,
       '@',
       $._pattern,
     ),
 
     reference_pattern: $ => seq(
       '&',
-      optional($.mutable_specifier),
+      optional('mut'),
       $._pattern,
     ),
 
@@ -1599,34 +1598,34 @@ module.exports = grammar({
     ),
 
     _path: $ => choice(
-      $.self,
+      $.keyword_scope,
       $.metavariable,
-      $.super,
-      $.crate,
-      $.identifier,
-      $.scoped_identifier,
-      $._reserved_identifier,
+      $.name,
+      $.scoped_name,
+      $._reserved_keyword,
     ),
 
-    identifier: $ => seq(optional("r#"), $.identifier_word),
+    keyword_scope: $ => choice(
+      'self',
+      'super',
+      'crate',
+    ),
 
-    identifier_word: _ =>  /[_\p{XID_Start}][_\p{XID_Continue}]*/,
+    name: $ => seq(optional('r#'), $.identifier),
+
+    identifier: _ =>  /[_\p{XID_Start}][_\p{XID_Continue}]*/,
 
 
     shebang: _ => /#![\s]*[^\[].+/,
 
-    _reserved_identifier: $ => alias(choice(
+    _reserved_keyword: $ => alias(choice(
       'default',
       'union',
       'gen',
-    ), $.identifier),
+    ), $.name),
 
-    _type_identifier: $ => alias($.identifier, $.type_identifier),
-    _field_identifier: $ => alias($.identifier, $.field_identifier),
-
-    self: _ => 'self',
-    super: _ => 'super',
-    crate: _ => 'crate',
+    _type_name: $ => alias($.name, $.type_name),
+    _field_name: $ => alias($.name, $.field_name),
 
     metavariable: _ => /\$[a-zA-Z_]\w*/,
   },
