@@ -281,7 +281,7 @@ module.exports = grammar({
       seq('link', '(', sepBy(',', $.meta_name_value), optional(','), ')'),
       seq('link_name', '=', $._any_string_literal),
       'no_link',
-      'repr',
+      seq('repr', '(', sepBy(',', $.repr_modifier), optional(','), ')'),
       seq('export_name', '=', $._any_string_literal),
       seq('link_section', '=', $._any_string_literal),
       'no_mangle',

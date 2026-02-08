@@ -1078,6 +1078,10 @@
           "named": true
         },
         {
+          "type": "repr_modifier",
+          "named": true
+        },
+        {
           "type": "simple_path",
           "named": true
         },
@@ -3682,6 +3686,25 @@
     }
   },
   {
+    "type": "repr_modifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "integer_literal",
+          "named": true
+        },
+        {
+          "type": "primitive_repr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "return_expression",
     "named": true,
     "fields": {},
@@ -5335,6 +5358,14 @@
     "named": false
   },
   {
+    "type": "C",
+    "named": false
+  },
+  {
+    "type": "Rust",
+    "named": false
+  },
+  {
     "type": "[",
     "named": false
   },
@@ -5352,6 +5383,10 @@
   },
   {
     "type": "_",
+    "named": false
+  },
+  {
+    "type": "align",
     "named": false
   },
   {
@@ -5715,6 +5750,10 @@
     "named": false
   },
   {
+    "type": "packed",
+    "named": false
+  },
+  {
     "type": "panic_handler",
     "named": false
   },
@@ -5725,6 +5764,10 @@
   {
     "type": "path",
     "named": false
+  },
+  {
+    "type": "primitive_repr",
+    "named": true
   },
   {
     "type": "proc_macro",
@@ -5836,6 +5879,10 @@
   },
   {
     "type": "trait",
+    "named": false
+  },
+  {
+    "type": "transparent",
     "named": false
   },
   {
