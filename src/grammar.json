@@ -11196,6 +11196,10 @@
       "members": [
         {
           "type": "SYMBOL",
+          "name": "self_type"
+        },
+        {
+          "type": "SYMBOL",
           "name": "keyword_scope"
         },
         {

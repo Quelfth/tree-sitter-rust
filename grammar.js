@@ -1722,6 +1722,7 @@ module.exports = grammar({
     ),
 
     _path: $ => choice(
+      $.self_type,
       $.keyword_scope,
       $.metavariable,
       $.name,

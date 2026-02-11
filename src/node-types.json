@@ -742,6 +742,10 @@
         {
           "type": "scoped_name",
           "named": true
+        },
+        {
+          "type": "self_type",
+          "named": true
         }
       ]
     }
@@ -3570,6 +3574,10 @@
         {
           "type": "scoped_name",
           "named": true
+        },
+        {
+          "type": "self_type",
+          "named": true
         }
       ]
     }
@@ -3764,6 +3772,10 @@
           {
             "type": "scoped_name",
             "named": true
+          },
+          {
+            "type": "self_type",
+            "named": true
           }
         ]
       }
@@ -3810,6 +3822,10 @@
           {
             "type": "scoped_name",
             "named": true
+          },
+          {
+            "type": "self_type",
+            "named": true
           }
         ]
       }
@@ -3847,6 +3863,10 @@
           },
           {
             "type": "scoped_name",
+            "named": true
+          },
+          {
+            "type": "self_type",
             "named": true
           }
         ]
@@ -4857,6 +4877,10 @@
           {
             "type": "scoped_name",
             "named": true
+          },
+          {
+            "type": "self_type",
+            "named": true
           }
         ]
       }
@@ -4888,6 +4912,10 @@
           },
           {
             "type": "scoped_use_list",
+            "named": true
+          },
+          {
+            "type": "self_type",
             "named": true
           },
           {
@@ -4945,6 +4973,10 @@
           "named": true
         },
         {
+          "type": "self_type",
+          "named": true
+        },
+        {
           "type": "use_as_clause",
           "named": true
         },
@@ -4981,6 +5013,10 @@
         },
         {
           "type": "scoped_name",
+          "named": true
+        },
+        {
+          "type": "self_type",
           "named": true
         }
       ]
@@ -5024,6 +5060,10 @@
         },
         {
           "type": "scoped_name",
+          "named": true
+        },
+        {
+          "type": "self_type",
           "named": true
         }
       ]
