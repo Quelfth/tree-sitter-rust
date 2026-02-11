@@ -5835,8 +5835,8 @@
           ]
         },
         {
-          "type": "STRING",
-          "value": "self"
+          "type": "SYMBOL",
+          "name": "self"
         }
       ]
     },

@@ -771,7 +771,7 @@ module.exports = grammar({
       optional('&'),
       optional($.lifetime),
       optional('mut'),
-      'self',
+      $.self,
     ),
 
     variadic_parameter: $ => seq(
