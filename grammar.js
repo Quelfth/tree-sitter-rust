@@ -849,7 +849,7 @@ module.exports = grammar({
       field('alias', $._type),
     ),
 
-    lifetime: $ => prec(1, seq(alias($.lifetime_quote, "'"), $.name)),
+    lifetime: $ => prec(1, seq(alias($.lifetime_quote, "'"), choice('static', '_', $.name))),
 
     array_type: $ => seq(
       '[',
