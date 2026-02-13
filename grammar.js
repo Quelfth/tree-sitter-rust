@@ -1111,7 +1111,7 @@ module.exports = grammar({
     range_expression: $ => prec.left(PREC.range, choice(
       seq($._expression, choice('..', '...', '..='), $._expression),
       seq($._expression, '..'),
-      seq('..', $._expression),
+      seq(choice('..', '..='), $._expression),
       '..',
     )),
 
