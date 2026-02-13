@@ -1011,6 +1011,7 @@ module.exports = grammar({
       prec.left($.name),
       prec.left($._reserved_keyword),
       $.self,
+      $.self_type,
       $.scoped_name,
       $.generic_function,
       $.await_expression,

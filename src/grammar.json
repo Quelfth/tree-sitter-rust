@@ -7018,6 +7018,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "self_type"
+        },
+        {
+          "type": "SYMBOL",
           "name": "scoped_name"
         },
         {

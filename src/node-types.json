@@ -214,6 +214,10 @@
         "named": true
       },
       {
+        "type": "self_type",
+        "named": true
+      },
+      {
         "type": "struct_expression",
         "named": true
       },
@@ -1232,6 +1236,10 @@
           },
           {
             "type": "self",
+            "named": true
+          },
+          {
+            "type": "self_type",
             "named": true
           },
           {
