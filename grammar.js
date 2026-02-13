@@ -934,6 +934,7 @@ module.exports = grammar({
       token(prec(1, '<')),
       sepBy1(',', seq(
         choice(
+          '_',
           $._type,
           $.type_binding,
           $.lifetime,

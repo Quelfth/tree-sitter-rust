@@ -6619,6 +6619,10 @@
                   "type": "CHOICE",
                   "members": [
                     {
+                      "type": "STRING",
+                      "value": "_"
+                    },
+                    {
                       "type": "SYMBOL",
                       "name": "_type"
                     },
@@ -6669,6 +6673,10 @@
                       {
                         "type": "CHOICE",
                         "members": [
+                          {
+                            "type": "STRING",
+                            "value": "_"
+                          },
                           {
                             "type": "SYMBOL",
                             "name": "_type"
