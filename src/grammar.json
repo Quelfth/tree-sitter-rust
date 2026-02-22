@@ -8542,6 +8542,10 @@
             "members": [
               {
                 "type": "SYMBOL",
+                "name": "self_type"
+              },
+              {
+                "type": "SYMBOL",
                 "name": "_type_name"
               },
               {
@@ -11439,6 +11443,10 @@
     ],
     [
       "visibility_modifier"
+    ],
+    [
+      "_expression_except_range",
+      "struct_expression"
     ]
   ],
   "precedences": [],

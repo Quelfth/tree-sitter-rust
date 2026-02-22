@@ -4093,6 +4093,10 @@
             "named": true
           },
           {
+            "type": "self_type",
+            "named": true
+          },
+          {
             "type": "type_name",
             "named": true
           }

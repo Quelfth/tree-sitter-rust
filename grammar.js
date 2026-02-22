@@ -99,6 +99,7 @@ module.exports = grammar({
     [$.type_parameters, $.for_lifetimes],
     [$.array_expression],
     [$.visibility_modifier],
+    [$._expression_except_range, $.struct_expression],
   ],
 
   word: $ => $.identifier,
@@ -1232,6 +1233,7 @@ module.exports = grammar({
 
     struct_expression: $ => seq(
       field('name', choice(
+        $.self_type,
         $._type_name,
         alias($.scoped_type_name_in_expression_position, $.scoped_type_name),
         $.generic_type_with_turbofish,
