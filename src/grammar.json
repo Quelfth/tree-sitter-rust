@@ -164,7 +164,11 @@
       "members": [
         {
           "type": "STRING",
-          "value": "macro_rules!"
+          "value": "macro_rules"
+        },
+        {
+          "type": "STRING",
+          "value": "!"
         },
         {
           "type": "FIELD",
@@ -546,6 +550,10 @@
         },
         {
           "type": "STRING",
+          "value": "expr_2021"
+        },
+        {
+          "type": "STRING",
           "value": "ident"
         },
         {
@@ -567,6 +575,10 @@
         {
           "type": "STRING",
           "value": "pat"
+        },
+        {
+          "type": "STRING",
+          "value": "pat_param"
         },
         {
           "type": "STRING",
@@ -939,6 +951,14 @@
                 {
                   "type": "STRING",
                   "value": "?"
+                },
+                {
+                  "type": "STRING",
+                  "value": "~"
+                },
+                {
+                  "type": "STRING",
+                  "value": "<-"
                 }
               ]
             }
@@ -11395,8 +11415,17 @@
       "value": "field_name"
     },
     "metavariable": {
-      "type": "PATTERN",
-      "value": "\\$[a-zA-Z_]\\w*"
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "$"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "name"
+        }
+      ]
     }
   },
   "extras": [

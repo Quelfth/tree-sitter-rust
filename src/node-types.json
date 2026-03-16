@@ -3238,6 +3238,21 @@
     }
   },
   {
+    "type": "metavariable",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "mod_item",
     "named": true,
     "fields": {
@@ -5366,6 +5381,10 @@
     "named": false
   },
   {
+    "type": "<-",
+    "named": false
+  },
+  {
     "type": "<<",
     "named": false
   },
@@ -5602,6 +5621,10 @@
     "named": false
   },
   {
+    "type": "expr_2021",
+    "named": false
+  },
+  {
     "type": "extern",
     "named": false
   },
@@ -5726,7 +5749,7 @@
     "named": false
   },
   {
-    "type": "macro_rules!",
+    "type": "macro_rules",
     "named": false
   },
   {
@@ -5740,10 +5763,6 @@
   {
     "type": "meta",
     "named": false
-  },
-  {
-    "type": "metavariable",
-    "named": true
   },
   {
     "type": "mod",
@@ -5815,6 +5834,10 @@
   },
   {
     "type": "pat",
+    "named": false
+  },
+  {
+    "type": "pat_param",
     "named": false
   },
   {
@@ -6035,6 +6058,10 @@
   },
   {
     "type": "}",
+    "named": false
+  },
+  {
+    "type": "~",
     "named": false
   }
 ]

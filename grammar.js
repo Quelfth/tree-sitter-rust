@@ -36,6 +36,7 @@ const TOKEN_TREE_NON_SPECIAL_PUNCTUATION = [
   '>>', '+=', '-=', '*=', '/=', '%=', '^=', '&=', '|=', '<<=',
   '>>=', '=', '==', '!=', '>', '<', '>=', '<=', '@', '_', '.',
   '..', '...', '..=', ',', ';', ':', '::', '->', '=>', '#', '?',
+  '~', '<-',
 ];
 
 module.exports = grammar({
@@ -155,7 +156,7 @@ module.exports = grammar({
       );
 
       return seq(
-        'macro_rules!',
+        'macro_rules', '!',
         field('name', choice(
           $.name,
           $._reserved_keyword,
@@ -199,7 +200,7 @@ module.exports = grammar({
     ),
 
     fragment_specifier: _ => choice(
-      'block', 'expr', 'ident', 'item', 'lifetime', 'literal', 'meta', 'pat',
+      'block', 'expr', 'expr_2021', 'ident', 'item', 'lifetime', 'literal', 'meta', 'pat', 'pat_param',
       'path', 'stmt', 'tt', 'ty', 'vis',
     ),
 
@@ -221,7 +222,7 @@ module.exports = grammar({
     ),
 
     // Matches non-delimiter tokens common to both macro invocations and
-    // definitions. This is everything except $ and metavariables (which begin
+    // definitions. This is everything except $ and metavariaseq('$', bles (which begi)n
     // with $).
     _non_special_token: $ => choice(
       $._literal, $.name, 'mut', 'self', 'super', 'crate',
@@ -1759,7 +1760,7 @@ module.exports = grammar({
     _type_name: $ => alias($.name, $.type_name),
     _field_name: $ => alias($.name, $.field_name),
 
-    metavariable: _ => /\$[a-zA-Z_]\w*/,
+    metavariable: $ => seq('$', $.name),
   },
 });
 
