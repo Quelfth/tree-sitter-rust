@@ -11426,8 +11426,17 @@
           "value": "$"
         },
         {
-          "type": "SYMBOL",
-          "name": "name"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "name"
+            },
+            {
+              "type": "STRING",
+              "value": "crate"
+            }
+          ]
         }
       ]
     }

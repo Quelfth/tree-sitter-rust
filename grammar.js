@@ -1761,7 +1761,7 @@ module.exports = grammar({
     _type_name: $ => alias($.name, $.type_name),
     _field_name: $ => alias($.name, $.field_name),
 
-    metavariable: $ => seq('$', $.name),
+    metavariable: $ => seq('$', choice($.name, "crate")),
   },
 });
 
