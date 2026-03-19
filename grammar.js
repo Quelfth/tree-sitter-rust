@@ -587,6 +587,7 @@ module.exports = grammar({
       field('left', choice(
         $.lifetime,
         $._type_name,
+        $.self_type,
         $.scoped_type_name,
         $.generic_type,
         $.reference_type,

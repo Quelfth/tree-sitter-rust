@@ -5162,6 +5162,10 @@
             "named": true
           },
           {
+            "type": "self_type",
+            "named": true
+          },
+          {
             "type": "tuple_type",
             "named": true
           },
