@@ -1450,24 +1450,25 @@ module.exports = grammar({
     // Section - Patterns
 
     _pattern: $ => choice(
-      $._literal_pattern,
-      $.name,
-      $.scoped_name,
-      $.tuple_pattern,
-      $.tuple_struct_pattern,
-      $.struct_pattern,
-      $._reserved_keyword,
-      $.ref_pattern,
-      $.slice_pattern,
-      $.captured_pattern,
-      $.reference_pattern,
-      $.remaining_field_pattern,
-      $.mut_pattern,
-      $.range_pattern,
-      $.or_pattern,
-      $.const_block,
-      $.macro_invocation,
-      '_',
+        $._literal_pattern,
+        $.name,
+        $.scoped_name,
+        $.parenthesized_pattern,
+        $.tuple_pattern,
+        $.tuple_struct_pattern,
+        $.struct_pattern,
+        $._reserved_keyword,
+        $.ref_pattern,
+        $.slice_pattern,
+        $.captured_pattern,
+        $.reference_pattern,
+        $.remaining_field_pattern,
+        $.mut_pattern,
+        $.range_pattern,
+        $.or_pattern,
+        $.const_block,
+        $.macro_invocation,
+        '_',
     ),
 
     parenthesized_pattern: $ => seq(
@@ -1476,7 +1477,7 @@ module.exports = grammar({
       ')',
     ),
 
-    tuple_pattern: $ => seq(
+    tuple_pattern: $ => prec(1, seq(
         '(',
         choice(
             $.remaining_field_pattern,
@@ -1487,7 +1488,7 @@ module.exports = grammar({
             ),
         ),
         ')',
-    ),
+    )),
 
     slice_pattern: $ => seq(
       '[',

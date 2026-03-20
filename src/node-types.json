@@ -360,6 +360,10 @@
         "named": true
       },
       {
+        "type": "parenthesized_pattern",
+        "named": true
+      },
+      {
         "type": "range_pattern",
         "named": true
       },
@@ -3493,6 +3497,21 @@
       "types": [
         {
           "type": "_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "parenthesized_pattern",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "_pattern",
           "named": true
         }
       ]
