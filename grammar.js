@@ -1487,6 +1487,7 @@ module.exports = grammar({
     tuple_struct_pattern: $ => seq(
       field('type', choice(
         $.name,
+        $.self_type,
         $.scoped_name,
         alias($.generic_type_with_turbofish, $.generic_type),
       )),
@@ -1499,6 +1500,7 @@ module.exports = grammar({
     struct_pattern: $ => seq(
       field('type', choice(
         $._type_name,
+        $.self_type,
         $.scoped_type_name,
       )),
       '{',

@@ -10036,6 +10036,10 @@
               },
               {
                 "type": "SYMBOL",
+                "name": "self_type"
+              },
+              {
+                "type": "SYMBOL",
                 "name": "scoped_name"
               },
               {
@@ -10117,6 +10121,10 @@
               {
                 "type": "SYMBOL",
                 "name": "_type_name"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "self_type"
               },
               {
                 "type": "SYMBOL",
