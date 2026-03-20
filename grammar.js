@@ -93,7 +93,7 @@ module.exports = grammar({
     // Local ambiguity due to anonymous types:
     // See https://internals.rust-lang.org/t/pre-rfc-deprecating-anonymous-parameters/3710
     [$._type, $._pattern],
-    [$.unit_type, $.tuple_pattern],
+    //[$.unit_type, $.tuple_pattern],
     [$.scoped_name, $.scoped_type_name],
     [$.parameters, $._pattern],
     [$.parameters, $.tuple_struct_pattern],
@@ -1470,11 +1470,23 @@ module.exports = grammar({
       '_',
     ),
 
-    tuple_pattern: $ => seq(
+    parenthesized_pattern: $ => seq(
       '(',
-      sepBy(',', choice($._pattern, $.closure_expression)),
-      optional(','),
+      $._pattern,
       ')',
+    ),
+
+    tuple_pattern: $ => seq(
+        '(',
+        choice(
+            $.remaining_field_pattern,
+            seq(
+                $._pattern, ',',
+                repeat(seq($._pattern, ',')),
+                optional($._pattern),
+            ),
+        ),
+        ')',
     ),
 
     slice_pattern: $ => seq(

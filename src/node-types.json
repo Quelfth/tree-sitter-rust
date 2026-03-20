@@ -4507,14 +4507,10 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "_pattern",
-          "named": true
-        },
-        {
-          "type": "closure_expression",
           "named": true
         }
       ]
