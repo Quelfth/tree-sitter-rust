@@ -1181,7 +1181,7 @@ module.exports = grammar({
     type_cast_expression: $ => prec.left(PREC.cast, seq(
       field('value', $._expression),
       'as',
-      field('type', $._type),
+      field('type', choice('_', $._type)),
     )),
 
     return_expression: $ => choice(
