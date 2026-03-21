@@ -94,6 +94,10 @@
     "named": true,
     "subtypes": [
       {
+        "type": "_",
+        "named": false
+      },
+      {
         "type": "_literal",
         "named": true
       },
@@ -1127,6 +1131,10 @@
         "required": true,
         "types": [
           {
+            "type": "_",
+            "named": false
+          },
+          {
             "type": "_literal",
             "named": true
           },
@@ -1461,10 +1469,6 @@
         "multiple": false,
         "required": true,
         "types": [
-          {
-            "type": "_",
-            "named": false
-          },
           {
             "type": "_expression",
             "named": true

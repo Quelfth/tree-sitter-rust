@@ -7132,6 +7132,10 @@
         {
           "type": "SYMBOL",
           "name": "_expression_ending_with_block"
+        },
+        {
+          "type": "STRING",
+          "value": "_"
         }
       ]
     },

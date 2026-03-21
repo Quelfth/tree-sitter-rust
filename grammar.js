@@ -1032,6 +1032,7 @@ module.exports = grammar({
       $.parenthesized_expression,
       $.struct_expression,
       $._expression_ending_with_block,
+      '_',
     ),
 
     _expression: $ => choice(
