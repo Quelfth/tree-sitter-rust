@@ -592,7 +592,9 @@ module.exports = grammar({
         $.generic_type,
         $.reference_type,
         $.pointer_type,
+        $.parenthesized_type,
         $.tuple_type,
+        $.unit_type,
         $.array_type,
         $.higher_ranked_trait_bound,
       )),
@@ -824,6 +826,7 @@ module.exports = grammar({
       $.pointer_type,
       $.generic_type,
       $.scoped_type_name,
+      $.parenthesized_type,
       $.tuple_type,
       $.unit_type,
       $.array_type,
@@ -890,10 +893,13 @@ module.exports = grammar({
       optional(seq('->', field('return_type', $._type))),
     ),
 
+    parenthesized_type: $ => seq('(', $._type, ')'),
+
     tuple_type: $ => seq(
       '(',
-      sepBy1(',', $._type),
-      optional(','),
+      $._type, ',',
+      repeat(seq($._type, ',')),
+      optional($._type),
       ')',
     ),
 

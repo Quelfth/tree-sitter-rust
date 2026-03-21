@@ -446,6 +446,10 @@
         "named": true
       },
       {
+        "type": "parenthesized_type",
+        "named": true
+      },
+      {
         "type": "pointer_type",
         "named": true
       },
@@ -3522,6 +3526,21 @@
     }
   },
   {
+    "type": "parenthesized_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "_type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "pointer_type",
     "named": true,
     "fields": {
@@ -5177,6 +5196,10 @@
             "named": true
           },
           {
+            "type": "parenthesized_type",
+            "named": true
+          },
+          {
             "type": "pointer_type",
             "named": true
           },
@@ -5198,6 +5221,10 @@
           },
           {
             "type": "type_name",
+            "named": true
+          },
+          {
+            "type": "unit_type",
             "named": true
           }
         ]
