@@ -943,9 +943,10 @@ module.exports = grammar({
         $._type,
     )),
 
-    precise_captures: $ => seq('use', alias($.type_arguments, $._type_arguments)),
+    precise_captures: $ => seq('use', $._type_arguments),
 
-    type_arguments: $ => seq(
+    type_arguments: $ => $._type_arguments,
+    _type_arguments: $ => seq(
       token(prec(1, '<')),
       sepBy1(',', seq(
         choice(

@@ -6650,17 +6650,16 @@
           "value": "use"
         },
         {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
-            "name": "type_arguments"
-          },
-          "named": true,
-          "value": "_type_arguments"
+          "type": "SYMBOL",
+          "name": "_type_arguments"
         }
       ]
     },
     "type_arguments": {
+      "type": "SYMBOL",
+      "name": "_type_arguments"
+    },
+    "_type_arguments": {
       "type": "SEQ",
       "members": [
         {
