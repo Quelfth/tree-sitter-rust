@@ -933,11 +933,17 @@ module.exports = grammar({
       field('type_arguments', $.type_arguments),
     ),
 
-    bounded_type: $ => prec.left(-1, choice(
-      seq($.lifetime, '+', $._type),
-      seq($._type, '+', $._type),
-      seq($._type, '+', $.lifetime),
+    bounded_type: $ => prec.left(-1, seq(
+        $._bounded_type_bound, '+', $._bounded_type_bound,
     )),
+
+    _bounded_type_bound: $ => prec.left(-1, choice(
+        $.lifetime,
+        $.precise_captures,
+        $._type,
+    )),
+
+    precise_captures: $ => seq('use', alias($.type_arguments, $._type_arguments)),
 
     type_arguments: $ => seq(
       token(prec(1, '<')),

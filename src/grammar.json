@@ -6604,61 +6604,61 @@
       "type": "PREC_LEFT",
       "value": -1,
       "content": {
-        "type": "CHOICE",
+        "type": "SEQ",
         "members": [
           {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "lifetime"
-              },
-              {
-                "type": "STRING",
-                "value": "+"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_type"
-              }
-            ]
+            "type": "SYMBOL",
+            "name": "_bounded_type_bound"
           },
           {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "_type"
-              },
-              {
-                "type": "STRING",
-                "value": "+"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_type"
-              }
-            ]
+            "type": "STRING",
+            "value": "+"
           },
           {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "_type"
-              },
-              {
-                "type": "STRING",
-                "value": "+"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "lifetime"
-              }
-            ]
+            "type": "SYMBOL",
+            "name": "_bounded_type_bound"
           }
         ]
       }
+    },
+    "_bounded_type_bound": {
+      "type": "PREC_LEFT",
+      "value": -1,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "lifetime"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "precise_captures"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_type"
+          }
+        ]
+      }
+    },
+    "precise_captures": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "use"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "type_arguments"
+          },
+          "named": true,
+          "value": "_type_arguments"
+        }
+      ]
     },
     "type_arguments": {
       "type": "SEQ",
