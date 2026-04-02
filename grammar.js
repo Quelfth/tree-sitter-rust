@@ -939,11 +939,11 @@ module.exports = grammar({
 
     _bounded_type_bound: $ => prec.left(-1, choice(
         $.lifetime,
-        $.precise_captures,
+        $.use_bound,
         $._type,
     )),
 
-    precise_captures: $ => seq('use', $._type_arguments),
+    use_bound: $ => seq('use', $._type_arguments),
 
     type_arguments: $ => $._type_arguments,
     _type_arguments: $ => seq(

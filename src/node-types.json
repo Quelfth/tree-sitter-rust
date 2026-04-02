@@ -986,7 +986,7 @@
           "named": true
         },
         {
-          "type": "precise_captures",
+          "type": "use_bound",
           "named": true
         }
       ]
@@ -3561,41 +3561,6 @@
     }
   },
   {
-    "type": "precise_captures",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "_literal",
-          "named": true
-        },
-        {
-          "type": "_type",
-          "named": true
-        },
-        {
-          "type": "block",
-          "named": true
-        },
-        {
-          "type": "lifetime",
-          "named": true
-        },
-        {
-          "type": "trait_bounds",
-          "named": true
-        },
-        {
-          "type": "type_binding",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "proc_macro_derive_helper_attributes",
     "named": true,
     "fields": {},
@@ -5004,6 +4969,41 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "use_bound",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "_literal",
+          "named": true
+        },
+        {
+          "type": "_type",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "lifetime",
+          "named": true
+        },
+        {
+          "type": "trait_bounds",
+          "named": true
+        },
+        {
+          "type": "type_binding",
+          "named": true
+        }
+      ]
     }
   },
   {

@@ -6633,7 +6633,7 @@
           },
           {
             "type": "SYMBOL",
-            "name": "precise_captures"
+            "name": "use_bound"
           },
           {
             "type": "SYMBOL",
@@ -6642,7 +6642,7 @@
         ]
       }
     },
-    "precise_captures": {
+    "use_bound": {
       "type": "SEQ",
       "members": [
         {
