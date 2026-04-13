@@ -60,6 +60,10 @@
         "named": true
       },
       {
+        "type": "macro_item",
+        "named": true
+      },
+      {
         "type": "mod_item",
         "named": true
       },
@@ -3090,10 +3094,60 @@
     }
   },
   {
+    "type": "macro_item",
+    "named": true,
+    "fields": {
+      "matcher": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "token_tree_pattern",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "name",
+            "named": true
+          }
+        ]
+      },
+      "transcriber": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "token_tree",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "macro_rule",
+          "named": true
+        },
+        {
+          "type": "visibility_modifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "macro_rule",
     "named": true,
     "fields": {
-      "left": {
+      "matcher": {
         "multiple": false,
         "required": true,
         "types": [
@@ -3103,7 +3157,7 @@
           }
         ]
       },
-      "right": {
+      "transcriber": {
         "multiple": false,
         "required": true,
         "types": [
@@ -5843,6 +5897,10 @@
   },
   {
     "type": "loop",
+    "named": false
+  },
+  {
+    "type": "macro",
     "named": false
   },
   {

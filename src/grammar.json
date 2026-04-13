@@ -87,6 +87,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "macro_item"
+        },
+        {
+          "type": "SYMBOL",
           "name": "empty_statement"
         },
         {
@@ -345,7 +349,7 @@
       "members": [
         {
           "type": "FIELD",
-          "name": "left",
+          "name": "matcher",
           "content": {
             "type": "SYMBOL",
             "name": "token_tree_pattern"
@@ -357,11 +361,149 @@
         },
         {
           "type": "FIELD",
-          "name": "right",
+          "name": "transcriber",
           "content": {
             "type": "SYMBOL",
             "name": "token_tree"
           }
+        }
+      ]
+    },
+    "macro_item": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "visibility_modifier"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "macro"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "name"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "matcher",
+                  "content": {
+                    "type": "ALIAS",
+                    "content": {
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "STRING",
+                          "value": "("
+                        },
+                        {
+                          "type": "REPEAT",
+                          "content": {
+                            "type": "SYMBOL",
+                            "name": "_token_pattern"
+                          }
+                        },
+                        {
+                          "type": "STRING",
+                          "value": ")"
+                        }
+                      ]
+                    },
+                    "named": true,
+                    "value": "token_tree_pattern"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "transcriber",
+                  "content": {
+                    "type": "ALIAS",
+                    "content": {
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "STRING",
+                          "value": "{"
+                        },
+                        {
+                          "type": "REPEAT",
+                          "content": {
+                            "type": "SYMBOL",
+                            "name": "_tokens"
+                          }
+                        },
+                        {
+                          "type": "STRING",
+                          "value": "}"
+                        }
+                      ]
+                    },
+                    "named": true,
+                    "value": "token_tree"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "{"
+                },
+                {
+                  "type": "REPEAT",
+                  "content": {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "SYMBOL",
+                        "name": "macro_rule"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": ";"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "macro_rule"
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                },
+                {
+                  "type": "STRING",
+                  "value": "}"
+                }
+              ]
+            }
+          ]
         }
       ]
     },

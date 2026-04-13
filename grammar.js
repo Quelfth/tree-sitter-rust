@@ -127,6 +127,7 @@ module.exports = grammar({
       $.const_item,
       $.macro_invocation,
       $.macro_definition,
+      $.macro_item,
       $.empty_statement,
       $.attribute_item,
       $.inner_attribute_item,
@@ -170,9 +171,23 @@ module.exports = grammar({
     },
 
     macro_rule: $ => seq(
-      field('left', $.token_tree_pattern),
+      field('matcher', $.token_tree_pattern),
       '=>',
-      field('right', $.token_tree),
+      field('transcriber', $.token_tree),
+    ),
+
+    macro_item: $ => seq(
+        optional($.visibility_modifier),
+        'macro',
+        field('name', $.name),
+        choice(
+            seq(
+                field('matcher', alias(seq('(', repeat($._token_pattern), ')'), $.token_tree_pattern)),
+                field('transcriber', alias(seq('{', repeat($._tokens), '}'), $.token_tree)),
+            ),
+            seq('{', repeat(seq($.macro_rule, ';')), optional($.macro_rule), '}')
+        ),
+        
     ),
 
     _token_pattern: $ => choice(
