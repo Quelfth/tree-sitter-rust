@@ -3097,32 +3097,12 @@
     "type": "macro_item",
     "named": true,
     "fields": {
-      "matcher": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "token_tree_pattern",
-            "named": true
-          }
-        ]
-      },
       "name": {
         "multiple": false,
         "required": true,
         "types": [
           {
             "type": "name",
-            "named": true
-          }
-        ]
-      },
-      "transcriber": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "token_tree",
             "named": true
           }
         ]
@@ -3133,7 +3113,39 @@
       "required": false,
       "types": [
         {
+          "type": "_literal",
+          "named": true
+        },
+        {
           "type": "macro_rule",
+          "named": true
+        },
+        {
+          "type": "metavariable",
+          "named": true
+        },
+        {
+          "type": "name",
+          "named": true
+        },
+        {
+          "type": "token_binding_pattern",
+          "named": true
+        },
+        {
+          "type": "token_repetition",
+          "named": true
+        },
+        {
+          "type": "token_repetition_pattern",
+          "named": true
+        },
+        {
+          "type": "token_tree",
+          "named": true
+        },
+        {
+          "type": "token_tree_pattern",
           "named": true
         },
         {

@@ -182,12 +182,11 @@ module.exports = grammar({
         field('name', $.name),
         choice(
             seq(
-                field('matcher', alias(seq('(', repeat($._token_pattern), ')'), $.token_tree_pattern)),
-                field('transcriber', alias(seq('{', repeat($._tokens), '}'), $.token_tree)),
+                seq('(', repeat($._token_pattern), ')'),
+                seq('{', repeat($._tokens), '}'),
             ),
             seq('{', repeat(seq($.macro_rule, ';')), optional($.macro_rule), '}')
         ),
-        
     ),
 
     _token_pattern: $ => choice(
