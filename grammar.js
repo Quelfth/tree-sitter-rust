@@ -1464,6 +1464,7 @@ module.exports = grammar({
 
     try_block: $ => seq(
       'try',
+      optional(seq('bikeshed', $._type)),
       $.block,
     ),
 

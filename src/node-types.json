@@ -4569,9 +4569,13 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "_type",
+          "named": true
+        },
         {
           "type": "block",
           "named": true
@@ -5673,6 +5677,10 @@
   },
   {
     "type": "await",
+    "named": false
+  },
+  {
+    "type": "bikeshed",
     "named": false
   },
   {
