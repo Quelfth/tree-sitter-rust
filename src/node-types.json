@@ -5644,7 +5644,7 @@
     "named": false
   },
   {
-    "type": "allow_interal_unsafe",
+    "type": "allow_internal_unsafe",
     "named": false
   },
   {

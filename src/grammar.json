@@ -2915,7 +2915,7 @@
         },
         {
           "type": "STRING",
-          "value": "allow_interal_unsafe"
+          "value": "allow_internal_unsafe"
         },
         {
           "type": "STRING",

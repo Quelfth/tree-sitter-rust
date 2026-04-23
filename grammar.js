@@ -333,7 +333,7 @@ module.exports = grammar({
       seq('rustc_const_stable', '(', sepBy(',', $.meta_name_value), optional(','), ')'),
       seq('rustc_default_body_unstable', '(', sepBy(',', $.meta_name_value), optional(','), ')'),
       seq('allow_internal_unstable', optional(seq('(', sepBy(',', $.name), optional(','), ')'))),
-      'allow_interal_unsafe',
+      'allow_internal_unsafe',
       'rustc_eii_foreign_item',
     ),
 
