@@ -1707,15 +1707,26 @@ module.exports = grammar({
 
     literal_char: _ => /[^\\']/,
 
-    escape_sequence: _ => token.immediate(
-      seq('\\',
-        choice(
-          /[^xu]/,
-          /u[0-9a-fA-F]{4}/,
-          /u\{[0-9a-fA-F]+\}/,
-          /x[0-9a-fA-F]{2}/,
+    escape_sequence: $ => seq(
+        token.immediate('\\'),
+        $.escape,
+    ),
+
+    escape: $ => choice(
+        token.immediate("'"),
+        token.immediate('"'),
+        token.immediate('\\'),
+        token.immediate('n'),
+        token.immediate('r'),
+        token.immediate('t'),
+        token.immediate('0'),
+        alias(token.immediate(/x[0-7][0-9a-fA-F]/), 'x'),
+        seq(token.immediate('u'),
+            token.immediate('{'),
+            alias(token.immediate(/([0-9a-fA-F]_*)+/), $.digits),
+            token.immediate('}'),
         ),
-      )),
+    ),
 
     boolean_literal: _ => choice('true', 'false'),
 
