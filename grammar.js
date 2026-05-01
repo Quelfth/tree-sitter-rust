@@ -185,7 +185,7 @@ module.exports = grammar({
                 seq('(', repeat($._token_pattern), ')'),
                 seq('{', repeat($._tokens), '}'),
             ),
-            seq('{', repeat(seq($.macro_rule, ';')), optional($.macro_rule), '}')
+            seq('{', repeat(seq($.macro_rule, ',')), optional($.macro_rule), '}')
         ),
     ),
 

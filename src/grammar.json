@@ -462,7 +462,7 @@
                       },
                       {
                         "type": "STRING",
-                        "value": ";"
+                        "value": ","
                       }
                     ]
                   }
