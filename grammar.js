@@ -1788,7 +1788,7 @@ module.exports = grammar({
       $.metavariable,
       $.name,
       $.scoped_name,
-      $._reserved_keyword,
+      //$._reserved_keyword,
     ),
 
     simple_path: $ => seq(optional('::'), $._simple_path_segment, repeat(seq('::', $._simple_path_segment))),

@@ -11567,10 +11567,6 @@
         {
           "type": "SYMBOL",
           "name": "scoped_name"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_reserved_keyword"
         }
       ]
     },
