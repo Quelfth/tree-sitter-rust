@@ -2600,10 +2600,6 @@
         "required": true,
         "types": [
           {
-            "type": "name",
-            "named": true
-          },
-          {
             "type": "scoped_name",
             "named": true
           },
@@ -3421,7 +3417,7 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "identifier",

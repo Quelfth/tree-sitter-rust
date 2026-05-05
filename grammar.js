@@ -85,7 +85,6 @@ module.exports = grammar({
     $._field_name,
     $._non_special_token,
     $._declaration_statement,
-    $._reserved_keyword,
     $._expression_ending_with_block,
   ],
 
@@ -160,7 +159,6 @@ module.exports = grammar({
         'macro_rules', '!',
         field('name', choice(
           $.name,
-          $._reserved_keyword,
         )),
         choice(
           seq('(', rules, ')', ';'),
@@ -932,7 +930,6 @@ module.exports = grammar({
     generic_type: $ => prec(1, seq(
       field('type', choice(
         $._type_name,
-        $._reserved_keyword,
         $.scoped_type_name,
       )),
       field('type_arguments', $.type_arguments),
@@ -1040,7 +1037,6 @@ module.exports = grammar({
       $.yield_expression,
       $._literal,
       prec.left($.name),
-      prec.left($._reserved_keyword),
       $.self,
       $.self_type,
       $.scoped_name,
@@ -1085,7 +1081,6 @@ module.exports = grammar({
       field('macro', choice(
         $.scoped_name,
         $.name,
-        $._reserved_keyword,
       )),
       '!',
       alias($.delim_token_tree, $.token_tree),
@@ -1486,7 +1481,6 @@ module.exports = grammar({
         $.tuple_pattern,
         $.tuple_struct_pattern,
         $.struct_pattern,
-        $._reserved_keyword,
         $.ref_pattern,
         $.slice_pattern,
         $.captured_pattern,
@@ -1788,7 +1782,6 @@ module.exports = grammar({
       $.metavariable,
       $.name,
       $.scoped_name,
-      //$._reserved_keyword,
     ),
 
     simple_path: $ => seq(optional('::'), $._simple_path_segment, repeat(seq('::', $._simple_path_segment))),
@@ -1806,12 +1799,6 @@ module.exports = grammar({
 
 
     shebang: _ => /#![\s]*[^\[].+/,
-
-    _reserved_keyword: $ => alias(choice(
-      'default',
-      'union',
-      'gen',
-    ), $.name),
 
     _type_name: $ => alias($.name, $.type_name),
     _field_name: $ => alias($.name, $.field_name),

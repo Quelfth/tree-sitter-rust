@@ -183,10 +183,6 @@
               {
                 "type": "SYMBOL",
                 "name": "name"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_reserved_keyword"
               }
             ]
           }
@@ -6670,10 +6666,6 @@
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "_reserved_keyword"
-                },
-                {
-                  "type": "SYMBOL",
                   "name": "scoped_type_name"
                 }
               ]
@@ -7201,14 +7193,6 @@
           }
         },
         {
-          "type": "PREC_LEFT",
-          "value": 0,
-          "content": {
-            "type": "SYMBOL",
-            "name": "_reserved_keyword"
-          }
-        },
-        {
           "type": "SYMBOL",
           "name": "self"
         },
@@ -7368,10 +7352,6 @@
               {
                 "type": "SYMBOL",
                 "name": "name"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_reserved_keyword"
               }
             ]
           }
@@ -10028,10 +10008,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_reserved_keyword"
-        },
-        {
-          "type": "SYMBOL",
           "name": "ref_pattern"
         },
         {
@@ -11666,28 +11642,6 @@
       "type": "PATTERN",
       "value": "#![\\s]*[^\\[].+"
     },
-    "_reserved_keyword": {
-      "type": "ALIAS",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "default"
-          },
-          {
-            "type": "STRING",
-            "value": "union"
-          },
-          {
-            "type": "STRING",
-            "value": "gen"
-          }
-        ]
-      },
-      "named": true,
-      "value": "name"
-    },
     "_type_name": {
       "type": "ALIAS",
       "content": {
@@ -11857,7 +11811,6 @@
     "_field_name",
     "_non_special_token",
     "_declaration_statement",
-    "_reserved_keyword",
     "_expression_ending_with_block"
   ],
   "supertypes": [
