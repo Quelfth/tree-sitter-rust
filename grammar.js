@@ -959,18 +959,20 @@ module.exports = grammar({
     type_arguments: $ => $._type_arguments,
     _type_arguments: $ => seq(
       token(prec(1, '<')),
-      sepBy1(',', seq(
-        choice(
-          '_',
-          $._type,
-          $.type_binding,
-          $.lifetime,
-          $._literal,
-          $.block,
-        ),
-        optional($.trait_bounds),
-      )),
-      optional(','),
+        optional(seq(
+          sepBy1(',', seq(
+            choice(
+              '_',
+              $._type,
+              $.type_binding,
+              $.lifetime,
+              $._literal,
+              $.block,
+            ),
+            optional($.trait_bounds),
+          )),
+          optional(','),
+        )),
       '>',
     ),
 
