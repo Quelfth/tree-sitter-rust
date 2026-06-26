@@ -761,7 +761,7 @@ module.exports = grammar({
     use_as_clause: $ => seq(
       field('path', $._path),
       'as',
-      field('alias', $.name),
+      field('alias', choice($.name, '_')),
     ),
 
     use_wildcard: $ => seq(

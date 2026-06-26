@@ -5034,6 +5034,10 @@
         "required": true,
         "types": [
           {
+            "type": "_",
+            "named": false
+          },
+          {
             "type": "name",
             "named": true
           }
