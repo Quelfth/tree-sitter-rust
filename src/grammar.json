@@ -5270,6 +5270,27 @@
         }
       ]
     },
+    "const_trait_bound": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "["
+        },
+        {
+          "type": "STRING",
+          "value": "const"
+        },
+        {
+          "type": "STRING",
+          "value": "]"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_type"
+        }
+      ]
+    },
     "type_parameters": {
       "type": "PREC",
       "value": 1,
@@ -6245,6 +6266,10 @@
         {
           "type": "SYMBOL",
           "name": "removed_trait_bound"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "const_trait_bound"
         }
       ]
     },
@@ -7103,6 +7128,10 @@
               {
                 "type": "SYMBOL",
                 "name": "removed_trait_bound"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "const_trait_bound"
               },
               {
                 "type": "SYMBOL",

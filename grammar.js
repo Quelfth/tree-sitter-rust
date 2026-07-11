@@ -671,6 +671,11 @@ module.exports = grammar({
       $._type,
     ),
 
+    const_trait_bound: $ => seq(
+        '[', 'const', ']',
+        $._type,
+    ),
+
     type_parameters: $ => prec(1, seq(
       '<',
       sepBy1(',', seq(
@@ -850,6 +855,7 @@ module.exports = grammar({
       $.dynamic_type,
       $.bounded_type,
       $.removed_trait_bound,
+      $.const_trait_bound,
     ),
 
     bracketed_type: $ => seq(
@@ -1007,6 +1013,7 @@ module.exports = grammar({
         $._type_name,
         $.scoped_type_name,
         $.removed_trait_bound,
+        $.const_trait_bound,
         $.generic_type,
         $.function_type,
         $.tuple_type,
