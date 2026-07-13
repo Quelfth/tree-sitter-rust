@@ -50,9 +50,9 @@ module.exports = grammar({
 
   externals: $ => [
     $.string_content,
-    $._raw_string_literal_start,
-    $.raw_string_literal_content,
-    $._raw_string_literal_end,
+    $._raw_string_start,
+    $.raw_string_content,
+    $._raw_string_end,
     $.char_prefix,
     $.char_quote,
     $.lifetime_quote,
@@ -273,10 +273,10 @@ module.exports = grammar({
     builtin_attribute: $ => choice(
       seq('cfg', '(', $._cfg_predicate, ')'),
       seq('cfg_attr', '(', $._cfg_predicate, ',', sepBy1(',', $._attribute), optional(','), ')'),
-      seq('ignore', optional(seq('=', $._any_string_literal))),
+      seq('ignore', optional(seq('=', $._any_string))),
       seq('should_panic', optional(choice(
         seq('(', $.meta_name_value, ')'),
-        seq('=', $._any_string_literal),
+        seq('=', $._any_string),
       ))),
       'automatically_derived',
       seq('macro_use', optional(seq('(', sepBy(',', $.name), optional(','), ')'))),
@@ -285,31 +285,31 @@ module.exports = grammar({
       seq('proc_macro_derive', '(', field('trait', $.name), optional(seq(',', $.proc_macro_derive_helper_attributes)), ')'),
       'proc_macro_attribute',
       $.lint_level_attribute,
-      seq('must_use', optional(seq('=', $._any_string_literal))),
+      seq('must_use', optional(seq('=', $._any_string))),
       seq('deprecated', optional(choice(
         seq('(', sepBy(',', $.meta_name_value), optional(','), ')'),
-        seq('=', $._any_string_literal),
+        seq('=', $._any_string),
       ))),
-      seq('crate_name', '=', $._any_string_literal),
-      seq('crate_type', '=', $._any_string_literal),
+      seq('crate_name', '=', $._any_string),
+      seq('crate_type', '=', $._any_string),
       seq('link', '(', sepBy(',', $.meta_name_value), optional(','), ')'),
-      seq('link_name', '=', $._any_string_literal),
+      seq('link_name', '=', $._any_string),
       'no_link',
       seq('repr', '(', sepBy(',', $.repr_modifier), optional(','), ')'),
-      seq('export_name', '=', $._any_string_literal),
-      seq('link_section', '=', $._any_string_literal),
+      seq('export_name', '=', $._any_string),
+      seq('link_section', '=', $._any_string),
       'no_mangle',
       seq('used', optional(seq('(', choice('compiler', 'linker'), ')'))),
       seq('link_ordinal', '(', $.integer_literal, ')'),
       'naked',
-      seq('recursion_limit', '=', $._any_string_literal),
-      seq('type_length_limit', '=', $._any_string_literal),
+      seq('recursion_limit', '=', $._any_string),
+      seq('type_length_limit', '=', $._any_string),
       'no_main',
-      seq('path', '=', $._any_string_literal),
+      seq('path', '=', $._any_string),
       'no_std',
       'no_implicit_prelude',
       'non_exhaustive',
-      seq('windows_subsystem', '=', $._any_string_literal),
+      seq('windows_subsystem', '=', $._any_string),
       'panic_handler',
       seq('inline', optional(seq('(', choice('always', 'never'), ')'))),
       'cold',
@@ -319,7 +319,7 @@ module.exports = grammar({
       seq('instruction_set', '(', sepBy(',', $.simple_path), optional(','), ')'),
       seq('doc', choice(
         seq('(', choice('hidden', 'inline'), ')'),
-        seq('=', $._any_string_literal),
+        seq('=', $._any_string),
       )),
       seq('debugger_visualizer', '(', sepBy(',', $.meta_name_value), optional(','), ')'),
       seq('collapse_debuginfo', '(', choice('no', 'external', 'yes'), ')'),
@@ -345,7 +345,7 @@ module.exports = grammar({
       ),
       '(', 
       sepBy(',', $.simple_path),
-      optional(seq(',', 'reason', '=', $._any_string_literal)),
+      optional(seq(',', 'reason', '=', $._any_string)),
       optional(','),
       ')',
     ),
@@ -361,9 +361,10 @@ module.exports = grammar({
 
     primitive_repr: $ => /[ui](8|16|32|64|128|size)/,
 
-    meta_name_value: $ => seq($.name, '=', $._any_string_literal),
+    meta_name_value: $ => seq($.name, '=', $._any_string),
 
-    _any_string_literal: $ => choice($.string_literal, $.raw_string_literal),
+    string_literal: $ => $._any_string,
+    _any_string: $ => choice($.string, $.raw_string),
 
     _cfg_predicate: $ => choice(
       $.cfg_option,
@@ -375,7 +376,7 @@ module.exports = grammar({
 
     cfg_option: $ => seq(
       $.name,
-      optional(seq('=', choice($.string_literal, $.raw_string_literal)))
+      optional(seq('=', $._any_string))
     ),
 
     cfg_all: $ => seq('all', '(', sepBy(',', $._cfg_predicate), optional(','), ')'),
@@ -817,7 +818,7 @@ module.exports = grammar({
 
     extern_modifier: $ => seq(
       'extern',
-      optional($.string_literal),
+      optional($._any_string),
     ),
 
     visibility_modifier: $ => choice(
@@ -1626,7 +1627,6 @@ module.exports = grammar({
 
     _literal: $ => choice(
       $.string_literal,
-      $.raw_string_literal,
       $.char_literal,
       $.boolean_literal,
       $.integer_literal,
@@ -1635,7 +1635,6 @@ module.exports = grammar({
 
     _literal_pattern: $ => choice(
       $.string_literal,
-      $.raw_string_literal,
       $.char_literal,
       $.boolean_literal,
       $.integer_literal,
@@ -1680,7 +1679,7 @@ module.exports = grammar({
       optional($.literal_suffix),
     ),
 
-    string_literal: $ => seq(
+    string: $ => seq(
       alias(/[bc]?"/, '"'),
       repeat(choice(
         $.escape_sequence,
@@ -1690,10 +1689,10 @@ module.exports = grammar({
       optional($.literal_suffix),
     ),
 
-    raw_string_literal: $ => seq(
-      alias($._raw_string_literal_start, '"'),
-      alias($.raw_string_literal_content, $.string_content),
-      alias($._raw_string_literal_end, '"'),
+    raw_string: $ => seq(
+      alias($._raw_string_start, '"'),
+      alias($.raw_string_content, $.string_content),
+      alias($._raw_string_end, '"'),
       optional($.literal_suffix),
     ),
 
