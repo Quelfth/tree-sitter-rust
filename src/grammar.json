@@ -11245,48 +11245,28 @@
         {
           "type": "IMMEDIATE_TOKEN",
           "content": {
-            "type": "ALIAS",
-            "content": {
-              "type": "PATTERN",
-              "value": "n"
-            },
-            "named": false,
+            "type": "STRING",
             "value": "n"
           }
         },
         {
           "type": "IMMEDIATE_TOKEN",
           "content": {
-            "type": "ALIAS",
-            "content": {
-              "type": "PATTERN",
-              "value": "r"
-            },
-            "named": false,
+            "type": "STRING",
             "value": "r"
           }
         },
         {
           "type": "IMMEDIATE_TOKEN",
           "content": {
-            "type": "ALIAS",
-            "content": {
-              "type": "PATTERN",
-              "value": "t"
-            },
-            "named": false,
+            "type": "STRING",
             "value": "t"
           }
         },
         {
           "type": "IMMEDIATE_TOKEN",
           "content": {
-            "type": "ALIAS",
-            "content": {
-              "type": "PATTERN",
-              "value": "0"
-            },
-            "named": false,
+            "type": "STRING",
             "value": "0"
           }
         },
@@ -11308,12 +11288,7 @@
             {
               "type": "IMMEDIATE_TOKEN",
               "content": {
-                "type": "ALIAS",
-                "content": {
-                  "type": "PATTERN",
-                  "value": "u"
-                },
-                "named": false,
+                "type": "STRING",
                 "value": "u"
               }
             },
