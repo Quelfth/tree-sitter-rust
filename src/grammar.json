@@ -11245,28 +11245,48 @@
         {
           "type": "IMMEDIATE_TOKEN",
           "content": {
-            "type": "STRING",
+            "type": "ALIAS",
+            "content": {
+              "type": "PATTERN",
+              "value": "n"
+            },
+            "named": false,
             "value": "n"
           }
         },
         {
           "type": "IMMEDIATE_TOKEN",
           "content": {
-            "type": "STRING",
+            "type": "ALIAS",
+            "content": {
+              "type": "PATTERN",
+              "value": "r"
+            },
+            "named": false,
             "value": "r"
           }
         },
         {
           "type": "IMMEDIATE_TOKEN",
           "content": {
-            "type": "STRING",
+            "type": "ALIAS",
+            "content": {
+              "type": "PATTERN",
+              "value": "t"
+            },
+            "named": false,
             "value": "t"
           }
         },
         {
           "type": "IMMEDIATE_TOKEN",
           "content": {
-            "type": "STRING",
+            "type": "ALIAS",
+            "content": {
+              "type": "PATTERN",
+              "value": "0"
+            },
+            "named": false,
             "value": "0"
           }
         },
@@ -11288,7 +11308,12 @@
             {
               "type": "IMMEDIATE_TOKEN",
               "content": {
-                "type": "STRING",
+                "type": "ALIAS",
+                "content": {
+                  "type": "PATTERN",
+                  "value": "u"
+                },
+                "named": false,
                 "value": "u"
               }
             },

@@ -5592,10 +5592,6 @@
     "named": false
   },
   {
-    "type": "0",
-    "named": false
-  },
-  {
     "type": "0b",
     "named": false
   },
@@ -6032,10 +6028,6 @@
     "named": false
   },
   {
-    "type": "n",
-    "named": false
-  },
-  {
     "type": "naked",
     "named": false
   },
@@ -6117,10 +6109,6 @@
   },
   {
     "type": "pub",
-    "named": false
-  },
-  {
-    "type": "r",
     "named": false
   },
   {
@@ -6208,10 +6196,6 @@
     "named": false
   },
   {
-    "type": "t",
-    "named": false
-  },
-  {
     "type": "target_feature",
     "named": false
   },
@@ -6249,10 +6233,6 @@
   },
   {
     "type": "type_length_limit",
-    "named": false
-  },
-  {
-    "type": "u",
     "named": false
   },
   {
