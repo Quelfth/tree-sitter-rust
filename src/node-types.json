@@ -406,19 +406,11 @@
     "named": true,
     "subtypes": [
       {
-        "type": "abstract_type",
-        "named": true
+        "type": "_",
+        "named": false
       },
       {
         "type": "array_type",
-        "named": true
-      },
-      {
-        "type": "bounded_type",
-        "named": true
-      },
-      {
-        "type": "const_trait_bound",
         "named": true
       },
       {
@@ -431,6 +423,10 @@
       },
       {
         "type": "generic_type",
+        "named": true
+      },
+      {
+        "type": "impl_trait_type",
         "named": true
       },
       {
@@ -458,10 +454,6 @@
         "named": true
       },
       {
-        "type": "removed_trait_bound",
-        "named": true
-      },
-      {
         "type": "scoped_type_name",
         "named": true
       },
@@ -482,56 +474,6 @@
         "named": true
       }
     ]
-  },
-  {
-    "type": "abstract_type",
-    "named": true,
-    "fields": {
-      "trait": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "const_trait_bound",
-            "named": true
-          },
-          {
-            "type": "function_type",
-            "named": true
-          },
-          {
-            "type": "generic_type",
-            "named": true
-          },
-          {
-            "type": "removed_trait_bound",
-            "named": true
-          },
-          {
-            "type": "scoped_type_name",
-            "named": true
-          },
-          {
-            "type": "tuple_type",
-            "named": true
-          },
-          {
-            "type": "type_name",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "type_parameters",
-          "named": true
-        }
-      ]
-    }
   },
   {
     "type": "arguments",
@@ -643,7 +585,7 @@
         "required": false,
         "types": [
           {
-            "type": "trait_bounds",
+            "type": "bounds",
             "named": true
           }
         ]
@@ -974,7 +916,7 @@
     "fields": {}
   },
   {
-    "type": "bounded_type",
+    "type": "bounds",
     "named": true,
     "fields": {},
     "children": {
@@ -982,11 +924,39 @@
       "required": true,
       "types": [
         {
-          "type": "_type",
+          "type": "const_trait_bound",
+          "named": true
+        },
+        {
+          "type": "generic_type",
+          "named": true
+        },
+        {
+          "type": "higher_ranked_trait_bound",
           "named": true
         },
         {
           "type": "lifetime",
+          "named": true
+        },
+        {
+          "type": "parenthesized_trait_bound",
+          "named": true
+        },
+        {
+          "type": "removed_trait_bound",
+          "named": true
+        },
+        {
+          "type": "scoped_type_name",
+          "named": true
+        },
+        {
+          "type": "self_type",
+          "named": true
+        },
+        {
+          "type": "type_name",
           "named": true
         },
         {
@@ -1691,16 +1661,29 @@
   {
     "type": "const_trait_bound",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "_type",
-          "named": true
-        }
-      ]
+    "fields": {
+      "trait": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "generic_type",
+            "named": true
+          },
+          {
+            "type": "scoped_type_name",
+            "named": true
+          },
+          {
+            "type": "self_type",
+            "named": true
+          },
+          {
+            "type": "type_name",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1712,7 +1695,7 @@
         "required": true,
         "types": [
           {
-            "type": "trait_bounds",
+            "type": "bounds",
             "named": true
           }
         ]
@@ -1766,33 +1749,16 @@
   {
     "type": "dynamic_type",
     "named": true,
-    "fields": {
-      "trait": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "function_type",
-            "named": true
-          },
-          {
-            "type": "generic_type",
-            "named": true
-          },
-          {
-            "type": "higher_ranked_trait_bound",
-            "named": true
-          },
-          {
-            "type": "scoped_type_name",
-            "named": true
-          },
-          {
-            "type": "type_name",
-            "named": true
-          }
-        ]
-      }
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "bounds",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -2251,6 +2217,22 @@
     }
   },
   {
+    "type": "for_binder",
+    "named": true,
+    "fields": {
+      "type_parameters": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_parameters",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "for_expression",
     "named": true,
     "fields": {
@@ -2291,21 +2273,6 @@
       "types": [
         {
           "type": "label",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "for_lifetimes",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "lifetime",
           "named": true
         }
       ]
@@ -2551,7 +2518,7 @@
       "required": false,
       "types": [
         {
-          "type": "for_lifetimes",
+          "type": "for_binder",
           "named": true
         },
         {
@@ -2678,26 +2645,38 @@
     "type": "higher_ranked_trait_bound",
     "named": true,
     "fields": {
-      "type": {
+      "trait": {
         "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "_type",
+            "type": "generic_type",
             "named": true
-          }
-        ]
-      },
-      "type_parameters": {
-        "multiple": false,
-        "required": true,
-        "types": [
+          },
           {
-            "type": "type_parameters",
+            "type": "scoped_type_name",
+            "named": true
+          },
+          {
+            "type": "self_type",
+            "named": true
+          },
+          {
+            "type": "type_name",
             "named": true
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "for_binder",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -2803,6 +2782,21 @@
       "types": [
         {
           "type": "where_clause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "impl_trait_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "bounds",
           "named": true
         }
       ]
@@ -3641,6 +3635,49 @@
     }
   },
   {
+    "type": "parenthesized_trait_bound",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "const_trait_bound",
+          "named": true
+        },
+        {
+          "type": "generic_type",
+          "named": true
+        },
+        {
+          "type": "higher_ranked_trait_bound",
+          "named": true
+        },
+        {
+          "type": "parenthesized_trait_bound",
+          "named": true
+        },
+        {
+          "type": "removed_trait_bound",
+          "named": true
+        },
+        {
+          "type": "scoped_type_name",
+          "named": true
+        },
+        {
+          "type": "self_type",
+          "named": true
+        },
+        {
+          "type": "type_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "parenthesized_type",
     "named": true,
     "fields": {},
@@ -3861,16 +3898,29 @@
   {
     "type": "removed_trait_bound",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "_type",
-          "named": true
-        }
-      ]
+    "fields": {
+      "trait": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "generic_type",
+            "named": true
+          },
+          {
+            "type": "scoped_type_name",
+            "named": true
+          },
+          {
+            "type": "self_type",
+            "named": true
+          },
+          {
+            "type": "type_name",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -4546,29 +4596,6 @@
     }
   },
   {
-    "type": "trait_bounds",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "_type",
-          "named": true
-        },
-        {
-          "type": "higher_ranked_trait_bound",
-          "named": true
-        },
-        {
-          "type": "lifetime",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "trait_item",
     "named": true,
     "fields": {
@@ -4587,7 +4614,7 @@
         "required": false,
         "types": [
           {
-            "type": "trait_bounds",
+            "type": "bounds",
             "named": true
           }
         ]
@@ -4770,11 +4797,11 @@
           "named": true
         },
         {
-          "type": "lifetime",
+          "type": "bounds",
           "named": true
         },
         {
-          "type": "trait_bounds",
+          "type": "lifetime",
           "named": true
         },
         {
@@ -4828,10 +4855,6 @@
         "multiple": false,
         "required": true,
         "types": [
-          {
-            "type": "_",
-            "named": false
-          },
           {
             "type": "_type",
             "named": true
@@ -5130,11 +5153,11 @@
           "named": true
         },
         {
-          "type": "lifetime",
+          "type": "bounds",
           "named": true
         },
         {
-          "type": "trait_bounds",
+          "type": "lifetime",
           "named": true
         },
         {
@@ -5351,61 +5374,37 @@
         "required": true,
         "types": [
           {
-            "type": "trait_bounds",
+            "type": "bounds",
             "named": true
           }
         ]
       },
-      "left": {
+      "for": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
-            "type": "array_type",
+            "type": "for_binder",
             "named": true
-          },
-          {
-            "type": "generic_type",
-            "named": true
-          },
-          {
-            "type": "higher_ranked_trait_bound",
-            "named": true
-          },
+          }
+        ]
+      },
+      "lifetime": {
+        "multiple": false,
+        "required": false,
+        "types": [
           {
             "type": "lifetime",
             "named": true
-          },
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": false,
+        "types": [
           {
-            "type": "parenthesized_type",
-            "named": true
-          },
-          {
-            "type": "pointer_type",
-            "named": true
-          },
-          {
-            "type": "reference_type",
-            "named": true
-          },
-          {
-            "type": "scoped_type_name",
-            "named": true
-          },
-          {
-            "type": "self_type",
-            "named": true
-          },
-          {
-            "type": "tuple_type",
-            "named": true
-          },
-          {
-            "type": "type_name",
-            "named": true
-          },
-          {
-            "type": "unit_type",
+            "type": "_type",
             "named": true
           }
         ]
