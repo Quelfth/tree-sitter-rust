@@ -93,9 +93,9 @@ module.exports = grammar({
         // See https://internals.rust-lang.org/t/pre-rfc-deprecating-anonymous-parameters/3710
         [$._type, $._pattern],
         [$._type_path, $._pattern],
+        [$._type_path, $.tuple_struct_pattern],
         [$.function_type],
         [$.scoped_name, $.scoped_type_name],
-        [$.parameters, $.tuple_struct_pattern],
         [$.array_expression],
         [$.bounds],
         [$.visibility_modifier],
@@ -807,6 +807,7 @@ module.exports = grammar({
         _type_path: $ => choice(
             $.scoped_type_name,
             $.generic_type,
+            $.function_trait,
             $.self_type,
             $._type_name,
         ),
@@ -856,19 +857,21 @@ module.exports = grammar({
         function_type: $ => seq(
             optional($.for_binder),
             prec(PREC.call, seq(
-                choice(
-                    field('trait', choice(
-                        $._type_name,
-                        $.scoped_type_name,
-                    )),
-                    seq(
-                        optional($.function_modifiers),
-                        'fn',
-                    ),
+                seq(
+                    optional($.function_modifiers),
+                    'fn',
                 ),
                 field('parameters', $.parameters),
             )),
             optional(seq('->', field('return_type', $._type))),
+        ),
+
+        function_trait: $ => seq(
+            prec(PREC.call, seq(
+                field('trait', $._type_path),
+                field('parameters', $.parameters),
+            )),
+            optional(seq('->', field('return_type', $._type)))
         ),
 
         parenthesized_type: $ => seq('(', $._type, ')'),
