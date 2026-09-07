@@ -10977,6 +10977,10 @@
               {
                 "type": "SYMBOL",
                 "name": "string_content"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_string_line_continuation"
               }
             ]
           }
@@ -11230,6 +11234,19 @@
               }
             }
           ]
+        }
+      ]
+    },
+    "_string_line_continuation": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\\\n"
+        },
+        {
+          "type": "STRING",
+          "value": "\\\r\n"
         }
       ]
     },

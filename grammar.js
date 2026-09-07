@@ -1666,6 +1666,7 @@ module.exports = grammar({
             repeat(choice(
                 $.escape_sequence,
                 $.string_content,
+                $._string_line_continuation,
             )),
             token.immediate('"'),
             optional($.literal_suffix),
@@ -1711,6 +1712,8 @@ module.exports = grammar({
                         token.immediate('}'),
                 ),
         ),
+
+        _string_line_continuation: $ => choice("\\\n", "\\\r\n"),
 
         boolean_literal: _ => choice('true', 'false'),
 
