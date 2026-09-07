@@ -1713,7 +1713,7 @@ module.exports = grammar({
                 ),
         ),
 
-        _string_line_continuation: $ => choice("\\\n", "\\\r\n"),
+        _string_line_continuation: $ => choice("\\\n", alias("\\\r\n", "\\\n")),
 
         boolean_literal: _ => choice('true', 'false'),
 

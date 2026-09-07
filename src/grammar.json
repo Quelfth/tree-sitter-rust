@@ -11245,8 +11245,13 @@
           "value": "\\\n"
         },
         {
-          "type": "STRING",
-          "value": "\\\r\n"
+          "type": "ALIAS",
+          "content": {
+            "type": "STRING",
+            "value": "\\\r\n"
+          },
+          "named": false,
+          "value": "\\\n"
         }
       ]
     },
