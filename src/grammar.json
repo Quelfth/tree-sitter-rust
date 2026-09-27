@@ -11130,120 +11130,85 @@
       "value": "[^\\\\']"
     },
     "escape_sequence": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "IMMEDIATE_TOKEN",
-          "content": {
-            "type": "STRING",
-            "value": "\\"
-          }
-        },
-        {
-          "type": "SYMBOL",
-          "name": "escape"
-        }
-      ]
-    },
-    "escape": {
       "type": "CHOICE",
       "members": [
         {
-          "type": "IMMEDIATE_TOKEN",
-          "content": {
-            "type": "STRING",
-            "value": "'"
-          }
+          "type": "STRING",
+          "value": "\\'"
         },
         {
-          "type": "IMMEDIATE_TOKEN",
-          "content": {
-            "type": "STRING",
-            "value": "\""
-          }
+          "type": "STRING",
+          "value": "\\\""
         },
         {
-          "type": "IMMEDIATE_TOKEN",
-          "content": {
-            "type": "STRING",
-            "value": "\\"
-          }
+          "type": "STRING",
+          "value": "\\\\"
         },
         {
-          "type": "IMMEDIATE_TOKEN",
-          "content": {
-            "type": "STRING",
-            "value": "n"
-          }
+          "type": "STRING",
+          "value": "\\n"
         },
         {
-          "type": "IMMEDIATE_TOKEN",
-          "content": {
-            "type": "STRING",
-            "value": "r"
-          }
+          "type": "STRING",
+          "value": "\\r"
         },
         {
-          "type": "IMMEDIATE_TOKEN",
-          "content": {
-            "type": "STRING",
-            "value": "t"
-          }
+          "type": "STRING",
+          "value": "\\t"
         },
         {
-          "type": "IMMEDIATE_TOKEN",
-          "content": {
-            "type": "STRING",
-            "value": "0"
-          }
-        },
-        {
-          "type": "ALIAS",
-          "content": {
-            "type": "IMMEDIATE_TOKEN",
-            "content": {
-              "type": "PATTERN",
-              "value": "x[0-7][0-9a-fA-F]"
-            }
-          },
-          "named": false,
-          "value": "x"
+          "type": "STRING",
+          "value": "\\0"
         },
         {
           "type": "SEQ",
           "members": [
             {
-              "type": "IMMEDIATE_TOKEN",
-              "content": {
-                "type": "STRING",
-                "value": "u"
-              }
-            },
-            {
-              "type": "IMMEDIATE_TOKEN",
-              "content": {
-                "type": "STRING",
-                "value": "{"
-              }
+              "type": "STRING",
+              "value": "\\x"
             },
             {
               "type": "ALIAS",
               "content": {
-                "type": "IMMEDIATE_TOKEN",
-                "content": {
-                  "type": "PATTERN",
-                  "value": "([0-9a-fA-F]_*)+"
-                }
+                "type": "PATTERN",
+                "value": "[0-9a-fA-F]{1,2}"
               },
               "named": true,
               "value": "digits"
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "\\u"
             },
             {
-              "type": "IMMEDIATE_TOKEN",
-              "content": {
-                "type": "STRING",
-                "value": "}"
-              }
+              "type": "STRING",
+              "value": "{"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "[0-9a-fA-F_]+"
+                  },
+                  "named": true,
+                  "value": "digits"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "STRING",
+              "value": "}"
             }
           ]
         }

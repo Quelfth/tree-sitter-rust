@@ -1917,7 +1917,7 @@
     }
   },
   {
-    "type": "escape",
+    "type": "escape_sequence",
     "named": true,
     "fields": {},
     "children": {
@@ -1926,21 +1926,6 @@
       "types": [
         {
           "type": "digits",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "escape_sequence",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "escape",
           "named": true
         }
       ]
@@ -5653,10 +5638,6 @@
     "named": false
   },
   {
-    "type": "0",
-    "named": false
-  },
-  {
     "type": "0b",
     "named": false
   },
@@ -5749,11 +5730,43 @@
     "named": false
   },
   {
-    "type": "\\",
+    "type": "\\\n",
     "named": false
   },
   {
-    "type": "\\\n",
+    "type": "\\\"",
+    "named": false
+  },
+  {
+    "type": "\\'",
+    "named": false
+  },
+  {
+    "type": "\\0",
+    "named": false
+  },
+  {
+    "type": "\\\\",
+    "named": false
+  },
+  {
+    "type": "\\n",
+    "named": false
+  },
+  {
+    "type": "\\r",
+    "named": false
+  },
+  {
+    "type": "\\t",
+    "named": false
+  },
+  {
+    "type": "\\u",
+    "named": false
+  },
+  {
+    "type": "\\x",
     "named": false
   },
   {
@@ -6097,10 +6110,6 @@
     "named": false
   },
   {
-    "type": "n",
-    "named": false
-  },
-  {
     "type": "naked",
     "named": false
   },
@@ -6182,10 +6191,6 @@
   },
   {
     "type": "pub",
-    "named": false
-  },
-  {
-    "type": "r",
     "named": false
   },
   {
@@ -6273,10 +6278,6 @@
     "named": false
   },
   {
-    "type": "t",
-    "named": false
-  },
-  {
     "type": "target_feature",
     "named": false
   },
@@ -6314,10 +6315,6 @@
   },
   {
     "type": "type_length_limit",
-    "named": false
-  },
-  {
-    "type": "u",
     "named": false
   },
   {
@@ -6362,10 +6359,6 @@
   },
   {
     "type": "windows_subsystem",
-    "named": false
-  },
-  {
-    "type": "x",
     "named": false
   },
   {
