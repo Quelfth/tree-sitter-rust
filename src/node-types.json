@@ -2197,15 +2197,42 @@
   {
     "type": "float_literal",
     "named": true,
-    "fields": {},
+    "fields": {
+      "exponent": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "digits",
+            "named": true
+          }
+        ]
+      },
+      "fraction": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "digits",
+            "named": true
+          }
+        ]
+      },
+      "whole": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "digits",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": true,
-      "required": true,
+      "multiple": false,
+      "required": false,
       "types": [
-        {
-          "type": "digits",
-          "named": true
-        },
         {
           "type": "literal_suffix",
           "named": true

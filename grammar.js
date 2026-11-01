@@ -1640,23 +1640,23 @@ module.exports = grammar({
         ),
 
         float_literal: $ => seq(
-            alias(/[0-9][0-9_]*/, $.digits),
+            field('whole', alias(/[0-9][0-9_]*/, $.digits)),
             choice(
                 seq(
                     alias($.decimal_point, "."),
-                    optional($.digits),
+                    optional(field('fraction', $.digits)),
                 ),
                 seq(
                     alias($.exponent_e, "e"),
                     optional(choice("+", "-")),
-                    $.digits,
+                    field('exponent', $.digits),
                 ),
                 seq(
                     alias($.decimal_point, "."),
-                    $.digits,
+                    field('fraction', $.digits),
                     alias($.exponent_e, "e"),
                     optional(choice("+", "-")),
-                    $.digits,
+                    field('exponent', $.digits),
                 ),
             ),
             optional($.literal_suffix),

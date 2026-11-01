@@ -10821,13 +10821,17 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "ALIAS",
+          "type": "FIELD",
+          "name": "whole",
           "content": {
-            "type": "PATTERN",
-            "value": "[0-9][0-9_]*"
-          },
-          "named": true,
-          "value": "digits"
+            "type": "ALIAS",
+            "content": {
+              "type": "PATTERN",
+              "value": "[0-9][0-9_]*"
+            },
+            "named": true,
+            "value": "digits"
+          }
         },
         {
           "type": "CHOICE",
@@ -10848,8 +10852,12 @@
                   "type": "CHOICE",
                   "members": [
                     {
-                      "type": "SYMBOL",
-                      "name": "digits"
+                      "type": "FIELD",
+                      "name": "fraction",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "digits"
+                      }
                     },
                     {
                       "type": "BLANK"
@@ -10892,8 +10900,12 @@
                   ]
                 },
                 {
-                  "type": "SYMBOL",
-                  "name": "digits"
+                  "type": "FIELD",
+                  "name": "exponent",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "digits"
+                  }
                 }
               ]
             },
@@ -10910,8 +10922,12 @@
                   "value": "."
                 },
                 {
-                  "type": "SYMBOL",
-                  "name": "digits"
+                  "type": "FIELD",
+                  "name": "fraction",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "digits"
+                  }
                 },
                 {
                   "type": "ALIAS",
@@ -10944,8 +10960,12 @@
                   ]
                 },
                 {
-                  "type": "SYMBOL",
-                  "name": "digits"
+                  "type": "FIELD",
+                  "name": "exponent",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "digits"
+                  }
                 }
               ]
             }
