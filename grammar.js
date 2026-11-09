@@ -489,6 +489,10 @@ module.exports = grammar({
             field('name', $._field_name),
             ':',
             field('type', $._type),
+            optional(seq(
+                '=',
+                field('value', $._expression),
+            )),
         ),
 
         ordered_field_declaration_list: $ => seq(
