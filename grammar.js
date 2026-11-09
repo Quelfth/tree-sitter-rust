@@ -1287,7 +1287,7 @@ module.exports = grammar({
 
         base_field_initializer: $ => seq(
             '..',
-            $._expression,
+            optional($._expression),
         ),
 
         if_expression: $ => prec.right(seq(
