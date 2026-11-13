@@ -239,7 +239,7 @@ module.exports = grammar({
         _non_special_token: $ => choice(
             $._literal, $.name, 'mut', 'self', 'super', 'crate',
             prec.right(repeat1(choice(...TOKEN_TREE_NON_SPECIAL_PUNCTUATION))),
-            '\'',
+            "'", alias($.lifetime_quote, "'"),
             'as', 'async', 'await', 'break', 'const', 'continue', 'default', 'enum', 'fn', 'for', 'gen',
             'if', 'impl', 'let', 'loop', 'match', 'mod', 'pub', 'return', 'static', 'struct', 'trait',
             'type', 'union', 'unsafe', 'use', 'where', 'while',

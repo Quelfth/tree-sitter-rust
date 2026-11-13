@@ -1089,6 +1089,15 @@
           "value": "'"
         },
         {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "lifetime_quote"
+          },
+          "named": false,
+          "value": "'"
+        },
+        {
           "type": "STRING",
           "value": "as"
         },
